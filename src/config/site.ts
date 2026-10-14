@@ -20,9 +20,9 @@ import type {
 export const SITE_CONFIG = {
   name: "NIErnaya",
 
-  tagline: "DATA DETECTIVE CHALLENGE",
+  tagline: "DATA TO DECISION",
 
-  subtitle: "DATA DETECTIVE CHALLENGE",
+  subtitle: "DATA TO DECISION",
 
   institution: "THE NATIONAL INSTITUTE OF ENGINEERING, MYSORE",
 
