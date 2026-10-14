@@ -288,45 +288,32 @@ export const Navbar: React.FC = () => {
               : 'bg-[#0D1219]/85 backdrop-blur-md border-[#FF7A30]/70'
           }`}
         >
+          
+{/* ==================================================
+    BRAND
+=================================================== */}
 
-          {/* ==================================================
-              BRAND
-          =================================================== */}
+<Link
+  to="/"
+  className="flex min-w-0 shrink items-center gap-3 group"
+>
+  {/* NIE LOGO */}
+  <div className="flex h-16 w-16 shrink-0 items-center justify-center">
+    <img
+      src="/assets/people/nie-logo.png"
+      alt="NIE Logo"
+      className="h-14 w-14 object-contain"
+    />
+  </div>
 
-          <Link
-            to="/"
-            className="flex items-center gap-3 group shrink-0"
-          >
+  {/* BRAND TEXT */}
+  <div className="flex min-w-0 flex-col">
+    <span className="max-w-[220px] truncate font-display text-xs font-black uppercase tracking-wide text-[#F5F7FA] transition-colors group-hover:text-[#36D9FF] sm:max-w-[280px] sm:text-sm lg:max-w-[300px]">
+      THE NATIONAL INSTITUTE OF ENGINEERING
+    </span>
+  </div>
+</Link>
 
-            {/* NIE LOGO */}
-
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center">
-              <img
-                src="/assets/people/nie-logo.png"
-                alt="NIE Logo"
-                className="h-14 w-14 object-contain"
-              />
-            </div>
-
-            {/* BRAND TEXT */}
-
-            <div className="flex flex-col">
-
-              <div className="flex items-center gap-1.5">
-
-                <span className="font-display font-black text-sm md:text-base tracking-wider text-[#F5F7FA] group-hover:text-[#36D9FF] transition-colors">
-                                  THE NATIONAL INSTITUTE OF ENGINEERING
-
-                </span>
-
-              </div>
-
-              <span className="text-[9px] font-mono text-[#8B96A5] tracking-widest hidden sm:block">
-              </span>
-
-            </div>
-
-          </Link>
 
           {/* ==================================================
               DESKTOP NAVIGATION
