@@ -232,55 +232,57 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* DEVELOPER / GUIDE STRIP */}
-        <div className="mt-14 grid grid-cols-1 gap-4 border-t border-white/10 pt-8 md:grid-cols-2">
+        
+{/* DEVELOPER / GUIDE STRIP */}
+<div className="mt-14 grid grid-cols-1 gap-5 border-t border-white/10 pt-8 md:grid-cols-2">
 
-          <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0A0E14] p-4">
-            <img
-              src="/assets/people/guide.jpg"
-              alt="Mr. Nishant R"
-              className="h-14 w-14 rounded-xl object-cover object-top"
-            />
+  {/* GUIDED BY */}
+  <div className="flex min-h-[180px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
+    <img
+      src="/assets/people/guide.jpg"
+      alt="Mr. Nishant R"
+className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
 
-            <div>
-              <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#36D9FF]">
-                GUIDED BY
-              </p>
+    <div className="min-w-0">
+      <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#36D9FF]">
+        GUIDED BY
+      </p>
 
-              <p className="mt-1 font-display text-base font-bold text-white">
-                Mr. Nishant R
-              </p>
+      <p className="mt-2 font-display text-lg font-bold text-white sm:text-xl">
+        Mr. Nishant R
+      </p>
 
-              <p className="text-[10px] text-[#8B96A5]">
-                Assistant Professor • CSE Department
-              </p>
-            </div>
-          </div>
+      <p className="mt-1 text-xs leading-relaxed text-[#8B96A5] sm:text-sm">
+        Assistant Professor • CSE Department
+      </p>
+    </div>
+  </div>
 
-          <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0A0E14] p-4">
-            <img
-              src="/assets/people/developer.jpeg"
-              alt="Aman Bapunavar"
-              className="h-14 w-14 rounded-xl object-cover object-top"
-            />
+  {/* DEVELOPER */}
+  <div className="flex min-h-[140px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
+    <img
+      src="/assets/people/developer.jpeg"
+      alt="Aman Bapunavar"
+className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
 
-            <div>
-              <p className="font-mono text-[9px] font-black uppercase tracking-wider text-[#FF7A30]">
-                DEVELOPED BY
-              </p>
+    <div className="min-w-0">
+      <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#FF7A30]">
+        DEVELOPED BY
+      </p>
 
-              <p className="mt-1 font-display text-base font-bold text-white">
-                {SITE_CONFIG.developerCredit.name}
-              </p>
+      <p className="mt-2 break-words font-display text-lg font-bold text-white sm:text-xl">
+        {SITE_CONFIG.developerCredit.name}
+      </p>
 
-              <p className="text-[10px] text-[#8B96A5]">
-                {SITE_CONFIG.developerCredit.department}
-              </p>
-            </div>
+      <p className="mt-1 text-xs leading-relaxed text-[#8B96A5] sm:text-sm">
+        {SITE_CONFIG.developerCredit.department}
+      </p>
+    </div>
 
-            <Code2 className="ml-auto hidden h-5 w-5 text-[#FF7A30] sm:block" />
-          </div>
-        </div>
+    <Code2 className="ml-auto hidden h-6 w-6 shrink-0 text-[#FF7A30] sm:block" />
+  </div>
+</div>
+
 
         {/* BOTTOM */}
         <div className="mt-8 flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-8 text-center md:flex-row md:text-left">
