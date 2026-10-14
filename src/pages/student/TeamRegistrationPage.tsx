@@ -191,6 +191,7 @@ export const TeamRegistrationPage: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
 
   const isLocked = existingTeam?.registration_status === 'locked';
   const hasExistingTeam = Boolean(existingTeam);
@@ -633,7 +634,24 @@ export const TeamRegistrationPage: React.FC = () => {
    * Submit team registration
    * -----------------------------------------------------------
    */
-  const handleSubmit = async (event: React.FormEvent) => {
+
+  const handleSubmit = (event: React.FormEvent) => {
+  event.preventDefault();
+
+  const validationError = validateRegistration();
+
+  if (validationError) {
+    setError(validationError);
+    setSuccess(null);
+    return;
+  }
+
+  setError(null);
+  setSuccess(null);
+  setShowPreview(true);
+};
+
+  const handleConfirmSubmit = async () => {
     event.preventDefault();
 
     if (!supabase) {
@@ -736,44 +754,7 @@ export const TeamRegistrationPage: React.FC = () => {
    * Final lock
    * -----------------------------------------------------------
    */
-  const handleLockTeam = async () => {
-    if (!supabase || !existingTeam) return;
-
-    const confirmed = window.confirm(
-      'Are you sure you want to FINAL LOCK this squad?\n\n' +
-        'After locking, the registration cannot be edited by the student. ' +
-        'The squad becomes eligible for faculty allocation.'
-    );
-
-    if (!confirmed) return;
-
-    setError(null);
-    setSuccess(null);
-    setLoading(true);
-
-    try {
-      const { error: rpcError } = await supabase.rpc(
-        'lock_team_registration',
-        {
-          p_team_id: existingTeam.id,
-        }
-      );
-
-      if (rpcError) {
-        throw rpcError;
-      }
-
-      setSuccess(
-        'Team registration successfully locked. The squad is now ready for faculty allocation.'
-      );
-
-      await loadRegistrationData();
-    } catch (err: any) {
-      setError(friendlyError(err?.message));
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   const leaderCampus = useMemo(
     () => getCampusForBranch(leaderBranch),
@@ -1030,17 +1011,6 @@ export const TeamRegistrationPage: React.FC = () => {
               </strong>
             </span>
 
-            {!isLocked && (
-              <button
-                type="button"
-                onClick={handleLockTeam}
-                disabled={loading}
-                className="px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/50 text-red-300 hover:bg-red-500/30 text-xs font-mono font-bold flex items-center gap-1.5 transition-colors disabled:opacity-50"
-              >
-                <Lock className="w-3.5 h-3.5" />
-                <span>FINAL LOCK-IN</span>
-              </button>
-            )}
           </div>
         )}
       </div>
@@ -1552,7 +1522,7 @@ export const TeamRegistrationPage: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <span>SUBMIT SQUAD REGISTRATION</span>
+                  <span>PREVIEW REGISTRATION</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -1593,6 +1563,88 @@ export const TeamRegistrationPage: React.FC = () => {
           </div>
         )}
       </form>
+
+      {showPreview && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
+    <div className="w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl border border-white/10 bg-[#0D1219] p-6 sm:p-8 space-y-6">
+      <div>
+        <h2 className="text-xl font-display font-black text-white">
+          Review Your Registration
+        </h2>
+        <p className="mt-2 text-sm text-[#8B96A5]">
+          Verify all details before submitting. No team has been registered yet.
+        </p>
+      </div>
+
+      <div className="space-y-4 text-sm">
+        <div className="rounded-xl border border-white/10 bg-[#121A23] p-4 space-y-2">
+          <h3 className="font-bold text-[#36D9FF]">Squad Details</h3>
+          <p><span className="text-[#8B96A5]">Squad Name:</span> {teamName}</p>
+          <p><span className="text-[#8B96A5]">Campus:</span> {campus}</p>
+          <p><span className="text-[#8B96A5]">Participation:</span> {mode}</p>
+          <p>
+            <span className="text-[#8B96A5]">Selected SDG:</span>{' '}
+            {SDG_OPTIONS.find((option) => option.value === selectedSdg)?.title}
+          </p>
+          <div>
+            <p className="text-[#8B96A5]">Problem Statement:</p>
+            <p className="mt-1 whitespace-pre-wrap">{problemStatement}</p>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-white/10 bg-[#121A23] p-4 space-y-2">
+          <h3 className="font-bold text-[#36D9FF]">Team Leader</h3>
+          <p><span className="text-[#8B96A5]">Name:</span> {leaderName}</p>
+          <p><span className="text-[#8B96A5]">USN:</span> {leaderUsn}</p>
+          <p><span className="text-[#8B96A5]">Email:</span> {leaderEmail}</p>
+          <p><span className="text-[#8B96A5]">Phone:</span> {leaderPhone}</p>
+          <p><span className="text-[#8B96A5]">Branch:</span> {leaderBranch}</p>
+          <p><span className="text-[#8B96A5]">Section:</span> {leaderSection}</p>
+        </div>
+
+        {members.map((member, index) => (
+          <div
+            key={index}
+            className="rounded-xl border border-white/10 bg-[#121A23] p-4 space-y-2"
+          >
+            <h3 className="font-bold text-[#FF7A30]">
+              Team Member {index + 2}
+            </h3>
+            <p><span className="text-[#8B96A5]">Name:</span> {member.name}</p>
+            <p><span className="text-[#8B96A5]">USN:</span> {member.usn}</p>
+            <p><span className="text-[#8B96A5]">Email:</span> {member.email}</p>
+            <p><span className="text-[#8B96A5]">Phone:</span> {member.phone || 'Not provided'}</p>
+            <p><span className="text-[#8B96A5]">Branch:</span> {member.branch}</p>
+            <p><span className="text-[#8B96A5]">Section:</span> {member.section}</p>
+            <p><span className="text-[#8B96A5]">Campus:</span> {member.campus}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
+        <button
+          type="button"
+          onClick={() => setShowPreview(false)}
+          className="px-5 py-3 rounded-xl border border-white/15 text-white text-sm font-bold hover:bg-white/5"
+        >
+          Back to Edit
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setShowPreview(false);
+            void handleConfirmSubmit();
+          }}
+          disabled={loading}
+          className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#FF7A30] to-[#FF9050] text-[#07090D] text-sm font-black disabled:opacity-60"
+        >
+          {loading ? 'REGISTERING...' : 'CONFIRM & SUBMIT REGISTRATION'}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Refresh */}
       <div className="flex justify-center pt-2">
