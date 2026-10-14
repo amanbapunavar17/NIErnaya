@@ -319,10 +319,6 @@ export const Navbar: React.FC = () => {
 
                 </span>
 
-                <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[#FF7A30]/20 text-[#FF7A30] font-bold rounded border border-[#FF7A30]/30">
-                  NIE
-                </span>
-
               </div>
 
               <span className="text-[9px] font-mono text-[#8B96A5] tracking-widest hidden sm:block">
