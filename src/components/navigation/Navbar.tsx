@@ -315,7 +315,8 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-1.5">
 
                 <span className="font-display font-black text-sm md:text-base tracking-wider text-[#F5F7FA] group-hover:text-[#36D9FF] transition-colors">
-                  NIErnaya
+                                  THE NATIONAL INSTITUTE OF ENGINEERING
+
                 </span>
 
                 <span className="text-[9px] font-mono px-1.5 py-0.5 bg-[#FF7A30]/20 text-[#FF7A30] font-bold rounded border border-[#FF7A30]/30">
@@ -325,7 +326,6 @@ export const Navbar: React.FC = () => {
               </div>
 
               <span className="text-[9px] font-mono text-[#8B96A5] tracking-widest hidden sm:block">
-                THE NATIONAL INSTITUTE OF ENGINEERING
               </span>
 
             </div>

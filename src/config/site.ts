@@ -68,7 +68,7 @@ export const SITE_CONFIG = {
       "NIE North Campus (CSE / AIML Block), Koorgalli, Mysuru",
 
     southCampusVenue:
-      "NIE South Campus (ECE, EEE, ME, CV Tech Center), Manandavadi Rd, Mysuru",
+      "NIE South Campus (ECE, EEE, ME), Manandavadi Rd, Mysuru",
 
     whatsappCommunityLink: "https://chat.whatsapp.com/JGsWjeav6U47BbcKrxBdyb",
 
