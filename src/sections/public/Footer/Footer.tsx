@@ -187,7 +187,7 @@ export const Footer: React.FC = () => {
                   to="/student/team"
                   className="font-bold text-[#FF7A30] transition-colors hover:text-[#FF9050]"
                 >
-                  Register Team
+                  
                 </Link>
               </li>
 
