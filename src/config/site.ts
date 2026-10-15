@@ -22,15 +22,15 @@ export const SITE_CONFIG = {
 
   tagline: "DATA TO DECISION",
 
-  subtitle: "DATA TO DECISION",
+  subtitle: "DATA DETECTIVE CHALLENGE",
 
-  institution: "THE NATIONAL INSTITUTE OF ENGINEERING, MYSORE",
-
+institution: "THE NATIONAL INSTITUTE OF ENGINEERING",
+department: "DEPARTMENT OF COMPUTER SCIENCE AND ENGINEERING",
   institutionShort: "NIE",
 
   branding: {
-    nieLogo: "/assets/branding/nie-logo.png",
-    cseLogo: "/assets/branding/cse-logo.png",
+    nieLogo: "/assets/branding/nie-logo1.png",
+    cseLogo: "/assets/branding/cse-logo1.png",
   },
 
   edition: "2026",

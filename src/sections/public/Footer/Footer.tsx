@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
           {/* Logo */}
           <div className="flex items-center gap-7">
             <img
-              src="/assets/branding/nie-logo.png"
+              src="/assets/branding/nie-logo1.png"
               alt="The National Institute of Engineering"
               className="h-24 w-auto max-w-[180px] object-contain object-left drop-shadow-[0_0_24px_rgba(255,255,255,0.08)] sm:h-28 sm:max-w-[220px]"
             />
@@ -47,8 +47,8 @@ export const Footer: React.FC = () => {
               </p>
 
               <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-white sm:text-4xl">
-                NIErnaya<span className="text-[#FF7A30]">'26</span>
-              </h2>
+              NIErnaya
+            </h2>
 
               <p className="mt-2 font-mono text-[10px] font-black uppercase tracking-[0.18em] text-[#AAB3C0]">
                 DISCOVER. ANALYZE. VISUALIZE.
@@ -68,7 +68,7 @@ export const Footer: React.FC = () => {
             </h3>
 
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#8B96A5]">
-              NIErnaya — Data Detective Challenge,
+              NIErnaya — From data to decision: A Data Detective Challenge,
               conducted by the CSE Department of The National Institute
               of Engineering, Mysuru.
             </p>
@@ -85,7 +85,7 @@ export const Footer: React.FC = () => {
             </h4>
 
             <p className="text-xs leading-6 text-[#8B96A5]">
-              A Data Detective Challenge focused on
+              From Data to Decision: A Data Detective Challenge focused on
               problem understanding, data handling, exploratory analysis,
               visualization, and insight generation.
             </p>
@@ -307,7 +307,7 @@ className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-2
           </button>
 
           <div className="font-mono text-[9px] font-bold uppercase tracking-wider text-[#8B96A5]">
-            DATA DETECTIVE CHALLENGE
+            FROM DATA TO DECISION
           </div>
         </div>
       </div>

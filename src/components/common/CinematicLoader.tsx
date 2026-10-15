@@ -80,7 +80,7 @@ export const CinematicLoader: React.FC<CinematicLoaderProps> = ({ onComplete }) 
             transition={{ duration: 0.6 }}
             className="w-40 h-40 sm:w-48 sm:h-48 object-contain drop-shadow-[0_0_30px_rgba(54,217,255,0.35)]"          >
               <img
-          src="/assets/people/nie-logo.png"
+          src="/assets/branding/nie-logo1.png"
           alt="National Institute of Engineering"
           className="w-40 h-40 sm:w-48 sm:h-48 object-contain drop-shadow-[0_0_30px_rgba(54,217,255,0.35)]"
         />

@@ -300,18 +300,19 @@ export const Navbar: React.FC = () => {
   {/* NIE LOGO */}
   <div className="flex h-16 w-16 shrink-0 items-center justify-center">
     <img
-      src="/assets/people/nie-logo.png"
+      src="/assets/branding/nie-logo1.png"
       alt="NIE Logo"
       className="h-14 w-14 object-contain"
     />
   </div>
 
-  {/* BRAND TEXT */}
-  <div className="flex min-w-0 flex-col">
-    <span className="max-w-[220px] truncate font-display text-xs font-black uppercase tracking-wide text-[#F5F7FA] transition-colors group-hover:text-[#36D9FF] sm:max-w-[280px] sm:text-sm lg:max-w-[300px]">
-      THE NATIONAL INSTITUTE OF ENGINEERING
-    </span>
-  </div>
+{/* BRAND TEXT */}
+<div className="flex min-w-0 items-center">
+  <span className="whitespace-nowrap font-display text-lg font-black tracking-tight text-[#F5F7FA] transition-colors duration-300 group-hover:text-[#36D9FF] sm:text-xl lg:text-2xl">
+    NIErnaya
+  </span>
+</div>
+
 </Link>
 
 

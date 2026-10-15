@@ -35,28 +35,40 @@ export const Hero: React.FC = () => {
       {/* Content */}
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center text-center">
 
-        {/* Institution */}
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 inline-flex items-center gap-3 rounded-full border border-[#FF7A30]/50 bg-[#0D1219]/90 px-4 py-1.5 shadow-xl shadow-[#FF7A30]/15 backdrop-blur-md transition-colors hover:border-[#36D9FF]"
-        >
-          <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full border border-[#FF7A30] bg-[#07090D] p-0.5">
-            <img
-              src="/nie-logo.png"
-              onError={(event) => {
-                event.currentTarget.src = '/nie-logo.svg';
-              }}
-              alt="NIE Logo"
-              className="h-full w-full object-contain"
-            />
-          </div>
+        {/* Institution and Department */}
+<motion.div
+  initial={{ y: -20, opacity: 0 }}
+  animate={{ y: 0, opacity: 1 }}
+  transition={{ duration: 0.6 }}
+  className="mb-6 flex max-w-full flex-col items-center gap-3 sm:flex-row sm:items-center sm:gap-5"
+>
 
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#F5F7FA]">
-            {SITE_CONFIG.institution}
-          </span>
-        </motion.div>
+{/* NIE Logo */}
+<img
+  src={SITE_CONFIG.branding.nieLogo}
+  alt="NIE Logo"
+  className="h-16 w-16 shrink-0 object-contain sm:h-20 sm:w-20"
+ />
+
+{/* Institution and Department */}
+<div className="min-w-0 text-center sm:text-left">
+  <p className="font-mono text-xs font-bold uppercase tracking-wider text-[#F5F7FA] sm:text-sm">
+    THE NATIONAL INSTITUTE OF ENGINEERING
+  </p>
+
+  <p className="mt-1 font-mono text-[10px] font-bold uppercase tracking-wide text-[#36D9FF] sm:text-xs">
+    Department of Computer Science and Engineering
+  </p>
+</div>
+
+{/* CSE Logo */}
+<img
+  src={SITE_CONFIG.branding.cseLogo}
+  alt="CSE Department Logo"
+  className="h-16 w-16 shrink-0 object-contain sm:ml-2 sm:h-20 sm:w-20"
+ />
+
+</motion.div>
 
         {/* Title */}
         <motion.div
@@ -65,16 +77,11 @@ export const Hero: React.FC = () => {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="max-w-4xl space-y-3"
         >
-          <div className="flex items-center justify-center gap-3">
-            <span className="rounded-full border border-[#36D9FF]/30 bg-[#36D9FF]/10 px-3.5 py-1 font-mono text-xs font-bold uppercase tracking-widest text-[#36D9FF] shadow-sm md:text-sm">
-              {SITE_CONFIG.subtitle}
-            </span>
-          </div>
+          
 
           <h1 className="font-display text-5xl font-black leading-none tracking-tight text-white sm:text-7xl md:text-8xl">
-            NIErnaya
-            <span className="text-[#FF7A30]">'26</span>
-          </h1>
+  NIErnaya
+</h1>
 
           <div className="py-1 font-mono text-sm font-bold uppercase tracking-[0.25em] text-[#36D9FF] text-glow-cyan sm:text-base md:text-xl">
             {SITE_CONFIG.tagline}
