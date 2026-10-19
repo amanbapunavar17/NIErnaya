@@ -30,8 +30,8 @@ type ContactConfig = {
 };
 
 const FALLBACK_CONTACT: ContactConfig = {
-  email: '',
-  phone: '',
+  email: 'nishanthr@nie.ac.in',
+  phone: '9686341445',
   address:
     'The National Institute of Engineering, Manandavadi Road, Mysuru, Karnataka 570008',
   northCampusVenue:
@@ -549,7 +549,7 @@ const Contact: React.FC = () => {
                 </div>
 
                 <span className="rounded-md border border-[#FF6A1A]/20 bg-[#FF6A1A]/5 px-2.5 py-1 font-mono text-[8px] font-bold uppercase tracking-wider text-[#FF6A1A]">
-                  ECE / EEE / ME / CV
+                  ECE / EEE / ME
                 </span>
               </div>
 

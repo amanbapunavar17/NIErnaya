@@ -405,6 +405,123 @@
 }
 
 /* =========================================================
+   CINEMATIC GLOW & 3D UTILITIES
+   ========================================================= */
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .perspective-1200 {
+    perspective: 1200px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .glow-cyan-sm {
+    box-shadow: 0 0 15px rgba(54, 217, 255, 0.18);
+  }
+  .glow-cyan-md {
+    box-shadow: 0 0 25px rgba(54, 217, 255, 0.28);
+  }
+  .glow-cyan-lg {
+    box-shadow: 0 0 40px rgba(54, 217, 255, 0.38);
+  }
+
+  .glow-orange-sm {
+    box-shadow: 0 0 15px rgba(255, 122, 48, 0.18);
+  }
+  .glow-orange-md {
+    box-shadow: 0 0 25px rgba(255, 122, 48, 0.28);
+  }
+  .glow-orange-lg {
+    box-shadow: 0 0 40px rgba(255, 122, 48, 0.38);
+  }
+
+  .glow-violet-sm {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.18);
+  }
+  .glow-violet-md {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.28);
+  }
+  .glow-violet-lg {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.38);
+  }
+
+  .glow-card-hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(54, 217, 255, 0.12);
+  }
+
+  .text-glow-gold {
+    text-shadow: 0 0 14px rgba(245, 158, 11, 0.45), 0 0 32px rgba(245, 158, 11, 0.25);
+  }
+
+  .text-glow-silver {
+    text-shadow: 0 0 14px rgba(203, 213, 225, 0.45), 0 0 32px rgba(203, 213, 225, 0.25);
+  }
+
+  .text-glow-bronze {
+    text-shadow: 0 0 14px rgba(217, 119, 6, 0.45), 0 0 32px rgba(217, 119, 6, 0.25);
+  }
+}
+
+/* =========================================================
+   CINEMATIC KEYFRAMES
+   ========================================================= */
+
+@keyframes pulseGlowCyan {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(54, 217, 255, 0.15), inset 0 0 8px rgba(54, 217, 255, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(54, 217, 255, 0.35), inset 0 0 16px rgba(54, 217, 255, 0.12);
+  }
+}
+
+@keyframes pulseGlowOrange {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(255, 122, 48, 0.15), inset 0 0 8px rgba(255, 122, 48, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 28px rgba(255, 122, 48, 0.35), inset 0 0 16px rgba(255, 122, 48, 0.12);
+  }
+}
+
+@keyframes subtleShimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes radarSweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-pulse-cyan {
+  animation: pulseGlowCyan 3s ease-in-out infinite;
+}
+
+.animate-pulse-orange {
+  animation: pulseGlowOrange 3s ease-in-out infinite;
+}
+
+.animate-radar {
+  animation: radarSweep 6s linear infinite;
+}
+
+/* =========================================================
    REDUCED MOTION
    ========================================================= */
 

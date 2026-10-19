@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   MessageCircle,
@@ -26,9 +27,7 @@ export const CommunityCTA: React.FC = () => {
     const { data, error } = await supabase
       .from('contact_config')
       .select('whatsapp_community_link')
-      .order('updated_at', {
-        ascending: false,
-      })
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
@@ -40,12 +39,8 @@ export const CommunityCTA: React.FC = () => {
       return;
     }
 
-    if (
-      data?.whatsapp_community_link
-    ) {
-      setWhatsappLink(
-        data.whatsapp_community_link.trim(),
-      );
+    if (data?.whatsapp_community_link) {
+      setWhatsappLink(data.whatsapp_community_link.trim());
     }
   }, []);
 
@@ -79,64 +74,70 @@ export const CommunityCTA: React.FC = () => {
   return (
     <section
       id="community"
-      className="relative border-t border-white/5 bg-[#07090D] px-4 py-20 md:px-8"
+      className="relative border-t border-white/5 bg-[#07090D] px-4 py-8 sm:px-6 md:px-8 md:py-10"
     >
-      <div className="mx-auto max-w-6xl">
-
-        <div className="relative flex flex-col items-center justify-between gap-8 overflow-hidden rounded-3xl border-2 border-[#FF7A30]/50 bg-gradient-to-r from-[#0D1219] via-[#121A23] to-[#0D1219] p-8 shadow-2xl shadow-[#FF7A30]/15 transition-colors duration-300 hover:border-[#FF7A30] sm:p-12 md:flex-row">
+      <div className="mx-auto max-w-7xl">
+        <div className="relative overflow-hidden rounded-[28px] border border-[#FF7A30]/80 bg-gradient-to-br from-[#0D141C] via-[#10151C] to-[#1B1718] p-6 transition-colors duration-300 hover:border-[#FF7A30] sm:p-8 lg:p-10">
 
           {/* Ambient glow */}
-          <div className="pointer-events-none absolute right-0 top-0 h-80 w-80 rounded-full bg-[#FF7A30]/15 blur-[100px]" />
+          <div className="pointer-events-none absolute right-0 top-0 h-72 w-72 rounded-full bg-[#FF7A30]/10 blur-[100px]" />
 
-          <div className="relative z-10 max-w-xl space-y-4 text-center md:text-left">
+          <div className="relative z-10 flex flex-col items-start justify-between gap-7 lg:flex-row lg:items-center lg:gap-10">
 
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#10B981]/15 px-3.5 py-1 font-mono text-xs font-bold uppercase tracking-wider text-[#10B981]">
-              <Radio className="h-3.5 w-3.5" />
-              <span>OFFICIAL COMMUNITY</span>
+            {/* Left: Community information */}
+            <div className="min-w-0 flex-1 space-y-4">
+
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/30 bg-[#10B981]/10 px-4 py-1.5 font-mono text-xs font-bold uppercase tracking-wider text-[#10B981]">
+                <Radio className="h-4 w-4" />
+                <span>OFFICIAL COMMUNITY</span>
+              </div>
+
+              <h2 className="font-display text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl">
+                JOIN THE NIErnaya COMMUNITY
+              </h2>
+
+              <p className="max-w-3xl text-sm leading-7 text-[#AAB3C0] sm:text-base">
+                Stay connected with official event announcements, phase
+                updates, mentoring information, submission notices, and
+                important logistics.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-1 font-mono text-xs font-bold text-[#36D9FF]">
+                <span className="inline-flex items-center gap-2">
+                  <Shield className="h-4 w-4 shrink-0" />
+                  NIE Community
+                </span>
+
+                <span className="inline-flex items-center gap-2">
+                  <Users className="h-4 w-4 shrink-0" />
+                  NIErnaya Participants
+                </span>
+              </div>
             </div>
 
-            <h2 className="font-display text-3xl font-black tracking-tight text-white sm:text-4xl">
-              JOIN THE NIErnaya COMMUNITY
-            </h2>
+            {/* Right: WhatsApp community button */}
+            {whatsappLink && (
+              <div className="relative z-10 w-full shrink-0 lg:w-auto">
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Join the NIErnaya WhatsApp Community"
+                  className="group flex min-h-[68px] w-full items-center justify-center gap-4 rounded-full border border-[#25D366] bg-[#25D366] px-7 py-5 font-display text-sm font-black uppercase tracking-wide text-[#07090D] shadow-[0_12px_30px_rgba(37,211,102,0.22)] transition-all duration-300 hover:-translate-y-1 hover:bg-[#20bd5a] hover:shadow-[0_16px_36px_rgba(37,211,102,0.3)] active:scale-[0.98] sm:px-9 lg:w-auto lg:min-w-[316px]"
+                >
+                  <MessageCircle className="h-5 w-5 shrink-0 fill-current" />
 
-            <p className="text-sm leading-relaxed text-[#8B96A5]">
-              Stay connected with official event announcements, phase updates,
-              mentoring information, submission notices, and important
-              logistics.
-            </p>
+                  <span className="whitespace-nowrap">
+                    JOIN COMMUNITY
+                  </span>
 
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-2 font-mono text-xs text-[#36D9FF] md:justify-start">
-              <span className="flex items-center gap-1.5">
-                <Shield className="h-3.5 w-3.5" />
-                NIE Community
-              </span>
+                  <ArrowRight className="h-5 w-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" />
+                </a>
+              </div>
+            )}
 
-              <span className="flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5" />
-                NIErnaya Participants
-              </span>
-            </div>
           </div>
-
-          {whatsappLink && (
-          <div className="relative z-10 shrink-0">
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Join the NIErnaya WhatsApp Community"
-              className="flex items-center gap-3 rounded-full border border-[#25D366] bg-[#25D366] px-8 py-4 font-display text-sm font-black uppercase tracking-wider text-[#07090D] shadow-xl shadow-[#25D366]/25 transition-all hover:scale-105 hover:bg-[#20bd5a] active:scale-95"
-            >
-              <MessageCircle className="h-5 w-5 fill-current" />
-
-              <span>JOIN COMMUNITY</span>
-
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
-          )}
         </div>
-
       </div>
     </section>
   );

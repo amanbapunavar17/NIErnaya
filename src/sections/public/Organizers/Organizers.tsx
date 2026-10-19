@@ -53,12 +53,23 @@ const FACULTY_CONTACTS = [
 const LEADERS = [
   {
     title: 'PRINCIPAL',
+    name: 'Dr. B S Nagendra Parashar',
+    designation: 'Principal',
     subtitle: 'The National Institute of Engineering, Mysuru',
     image: '/assets/people/principal.jpg',
   },
   {
-    title: 'HEAD OF DEPARTMENT',
-    subtitle: 'Department of Computer Science and Engineering',
+    title: 'VICE-PRINCIPAL',
+    name: 'Dr. Likith Kumar M V',
+    designation: 'Associate Professor',
+    subtitle: 'The National Institute of Engineering, Mysuru',
+    image: '/assets/people/vice-principal.png',
+  },
+  {
+    title: 'HEAD OF DEPARTMENT CSE',
+    name: 'Dr. Anitha R',
+    designation: 'Professor & Head, Computer Science and Engineering',
+    subtitle: 'The National Institute of Engineering, Mysuru',
     image: '/assets/people/hod-cse.jpg',
   },
 ];
@@ -92,44 +103,49 @@ export const Organizers: React.FC = () => {
           </p>
         </div>
 
-        {/* Principal + HOD */}
-        <div className="mb-8 grid grid-cols-1 gap-4 md:mb-10 md:grid-cols-2 md:gap-6">
-          {LEADERS.map((leader) => (
-            <article
-              key={leader.title}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0D1219] sm:flex-row"
-            >
-              <div className="relative h-40 w-full shrink-0 overflow-hidden bg-[#121A23] sm:h-auto sm:w-44 md:w-48">
-                <img
-                  src={leader.image}
-                  alt={leader.title}
-                  className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105"
-                  loading="lazy"
-                  onError={(event) => {
-                    event.currentTarget.style.display = 'none';
-                  }}
-                />
-              </div>
+        
+{/* Principal + Vice-Principal + HOD */}
+<div className="mb-8 grid grid-cols-1 items-stretch gap-4 md:mb-10 md:grid-cols-3 md:gap-5">
+  {LEADERS.map((leader) => (
+    <article
+      key={leader.title}
+      className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0D1219] transition-all duration-300 hover:border-[#FF7A30]/40 hover:shadow-xl hover:shadow-[#FF7A30]/5"
+    >
+      {/* Official portrait */}
+      <div className="relative h-56 w-full shrink-0 overflow-hidden bg-[#121A23] sm:h-64 md:h-56 lg:h-64">
+        <img
+          src={leader.image}
+          alt={leader.name}
+          className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105"
+          loading="lazy"
+          onError={(event) => {
+            event.currentTarget.style.display = 'none';
+          }}
+        />
+      </div>
 
-              <div className="flex flex-1 flex-col justify-center p-4 sm:p-5 md:p-6">
-                <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-[#FF7A30]/25 bg-[#FF7A30]/10 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-wider text-[#FF7A30]">
-                  <Users2 className="h-3.5 w-3.5" />
-                  {leader.title}
-                </div>
-
-                <h3 className="font-display text-xl font-black text-white sm:text-2xl">
-                  {leader.title === 'PRINCIPAL'
-                    ? 'Principal, NIE Mysuru'
-                    : 'Head, Department of CSE'}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-[#8B96A5]">
-                  {leader.subtitle}
-                </p>
-              </div>
-            </article>
-          ))}
+      {/* Official details */}
+      <div className="flex flex-1 flex-col p-4 sm:p-5">
+        <div className="mb-3 inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[#FF7A30]/25 bg-[#FF7A30]/10 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-wider text-[#FF7A30]">
+          <Users2 className="h-3.5 w-3.5 shrink-0" />
+          <span>{leader.title}</span>
         </div>
+
+        <h3 className="font-display text-xl font-black leading-snug text-white transition-colors group-hover:text-[#36D9FF] sm:text-2xl">
+          {leader.name}
+        </h3>
+
+        <p className="mt-2 text-sm font-semibold leading-6 text-[#D5DCE5]">
+          {leader.designation}
+        </p>
+
+        <p className="mt-2 text-xs leading-5 text-[#8B96A5] sm:text-sm">
+          {leader.subtitle}
+        </p>
+      </div>
+    </article>
+  ))}
+</div>
 
         {/* Faculty heading */}
         <div className="mb-6 flex items-center gap-4 sm:mb-8">

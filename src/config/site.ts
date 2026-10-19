@@ -576,7 +576,7 @@ export const FAQ_DATA: FAQItem[] = [
   },
 
   {
-    id: "faq-5",
+    id: "faq-4",
 
     question:
       "What formats and tools can we use for analytics & visualization?",
@@ -586,13 +586,13 @@ export const FAQ_DATA: FAQItem[] = [
 
     category: "Submissions",
 
-    sort_order: 5,
+    sort_order: 4,
 
     published: true,
   },
 
   {
-    id: "faq-6",
+    id: "faq-5",
 
     question:
       "How are faculty mentors allocated?",
@@ -602,7 +602,7 @@ export const FAQ_DATA: FAQItem[] = [
 
     category: "Mentorship",
 
-    sort_order: 6,
+    sort_order: 5,
 
     published: true,
   },

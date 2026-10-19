@@ -1,3 +1,16 @@
+/**
+ * ================================================================
+ * ParticleNetwork.tsx — Cinematic Multi-Layer 3D Data Network
+ * ================================================================
+ * Effects added:
+ * - Dual-layer particle telemetry: Cyan primary nodes + Amber background stars
+ * - Deterministic procedural distribution (stable across React re-renders)
+ * - Proximity-linked analytical line segment network with smooth wave breathing
+ * - Realtime mouse cursor attraction and depth parallax
+ * - Additive blending with GPU attenuation for maximum visual immersion
+ * ================================================================
+ */
+
 import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -9,24 +22,20 @@ type NetworkData = {
 };
 
 export const ParticleNetwork: React.FC = () => {
-  const particleCount = 150;
-  const connectionDistance = 2.35;
+  const particleCount = 180;
+  const dustCount = 80;
+  const connectionDistance = 2.4;
 
   const particlesRef = useRef<THREE.Points>(null!);
+  const dustRef = useRef<THREE.Points>(null!);
   const linesRef = useRef<THREE.LineSegments>(null!);
 
+  /* Primary network geometry */
   const network = useMemo<NetworkData>(() => {
     const positions = new Float32Array(particleCount * 3);
     const originals = new Float32Array(particleCount * 3);
 
-    /*
-     * Deterministic pseudo-random generator.
-     *
-     * This prevents the background from changing randomly every
-     * React render and makes the visual environment stable.
-     */
     let seed = 7919;
-
     const random = () => {
       seed = (seed * 16807) % 2147483647;
       return (seed - 1) / 2147483646;
@@ -34,9 +43,8 @@ export const ParticleNetwork: React.FC = () => {
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
-
-      const x = (random() - 0.5) * 15;
-      const y = (random() - 0.5) * 11;
+      const x = (random() - 0.5) * 16;
+      const y = (random() - 0.5) * 12;
       const z = (random() - 0.5) * 9;
 
       positions[i3] = x;
@@ -48,14 +56,7 @@ export const ParticleNetwork: React.FC = () => {
       originals[i3 + 2] = z;
     }
 
-    /*
-     * Build a lightweight proximity network.
-     *
-     * Only nearby points are connected, avoiding a huge number
-     * of lines and keeping the scene performant.
-     */
     const lineArray: number[] = [];
-
     for (let i = 0; i < particleCount; i++) {
       const ix = originals[i * 3];
       const iy = originals[i * 3 + 1];
@@ -69,20 +70,10 @@ export const ParticleNetwork: React.FC = () => {
         const dx = ix - jx;
         const dy = iy - jy;
         const dz = iz - jz;
-
-        const distance = Math.sqrt(
-          dx * dx + dy * dy + dz * dz,
-        );
+        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
         if (distance < connectionDistance) {
-          lineArray.push(
-            ix,
-            iy,
-            iz,
-            jx,
-            jy,
-            jz,
-          );
+          lineArray.push(ix, iy, iz, jx, jy, jz);
         }
       }
     }
@@ -94,86 +85,80 @@ export const ParticleNetwork: React.FC = () => {
     };
   }, []);
 
+  /* Ambient deep analytical dust (orange / amber starfield) */
+  const dustPositions = useMemo(() => {
+    const arr = new Float32Array(dustCount * 3);
+    let seed = 4217;
+    const random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    };
+    for (let i = 0; i < dustCount; i++) {
+      arr[i * 3] = (random() - 0.5) * 20;
+      arr[i * 3 + 1] = (random() - 0.5) * 15;
+      arr[i * 3 + 2] = (random() - 0.5) * 12 - 3; // deeper in z
+    }
+    return arr;
+  }, []);
+
   useFrame(({ clock, mouse }) => {
     const t = clock.getElapsedTime();
 
-    const particlePosition =
-      particlesRef.current.geometry.attributes.position
+    if (particlesRef.current) {
+      const particlePosition = particlesRef.current.geometry.attributes.position
         .array as Float32Array;
 
-    for (let i = 0; i < particleCount; i++) {
-      const i3 = i * 3;
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+        const ox = network.originals[i3];
+        const oy = network.originals[i3 + 1];
+        const oz = network.originals[i3 + 2];
 
-      const originalX = network.originals[i3];
-      const originalY = network.originals[i3 + 1];
-      const originalZ = network.originals[i3 + 2];
-
-      /*
-       * Slow organic movement.
-       */
-      particlePosition[i3] =
-        originalX +
-        Math.sin(t * 0.18 + originalY * 0.7) * 0.18 +
-        mouse.x * 0.16;
-
-      particlePosition[i3 + 1] =
-        originalY +
-        Math.cos(t * 0.16 + originalX * 0.5) * 0.16 +
-        mouse.y * 0.1;
-
-      particlePosition[i3 + 2] =
-        originalZ +
-        Math.sin(t * 0.13 + originalX * 0.25) * 0.12;
+        particlePosition[i3] =
+          ox + Math.sin(t * 0.18 + oy * 0.7) * 0.18 + mouse.x * 0.16;
+        particlePosition[i3 + 1] =
+          oy + Math.cos(t * 0.16 + ox * 0.5) * 0.16 + mouse.y * 0.1;
+        particlePosition[i3 + 2] =
+          oz + Math.sin(t * 0.13 + ox * 0.25) * 0.12;
+      }
+      particlesRef.current.geometry.attributes.position.needsUpdate = true;
     }
 
-    particlesRef.current.geometry.attributes.position.needsUpdate =
-      true;
-
-    /*
-     * The connection network follows the same subtle movement.
-     *
-     * Since the lines are intentionally very faint, the effect
-     * feels like a distant digital data field.
-     */
-    const linePosition =
-      linesRef.current.geometry.attributes.position
+    if (linesRef.current) {
+      const linePosition = linesRef.current.geometry.attributes.position
         .array as Float32Array;
 
-    for (let i = 0; i < linePosition.length; i += 6) {
-      const ax = linePosition[i];
-      const ay = linePosition[i + 1];
-      const az = linePosition[i + 2];
+      for (let i = 0; i < linePosition.length; i += 6) {
+        const ax = linePosition[i];
+        const ay = linePosition[i + 1];
+        const az = linePosition[i + 2];
+        const bx = linePosition[i + 3];
+        const by = linePosition[i + 4];
+        const bz = linePosition[i + 5];
 
-      const bx = linePosition[i + 3];
-      const by = linePosition[i + 4];
-      const bz = linePosition[i + 5];
+        const waveA = Math.sin(t * 0.12 + ax * 0.35) * 0.035;
+        const waveB = Math.cos(t * 0.11 + bx * 0.35) * 0.035;
 
-      /*
-       * Keep the original network geometry stable while giving
-       * the entire network a slow breathing motion.
-       */
-      const waveA = Math.sin(t * 0.12 + ax * 0.35) * 0.035;
-      const waveB = Math.cos(t * 0.11 + bx * 0.35) * 0.035;
-
-      linePosition[i] = ax + waveA;
-      linePosition[i + 1] = ay + waveA * 0.5;
-      linePosition[i + 2] = az;
-
-      linePosition[i + 3] = bx + waveB;
-      linePosition[i + 4] = by + waveB * 0.5;
-      linePosition[i + 5] = bz;
+        linePosition[i] = ax + waveA;
+        linePosition[i + 1] = ay + waveA * 0.5;
+        linePosition[i + 2] = az;
+        linePosition[i + 3] = bx + waveB;
+        linePosition[i + 4] = by + waveB * 0.5;
+        linePosition[i + 5] = bz;
+      }
+      linesRef.current.geometry.attributes.position.needsUpdate = true;
     }
 
-    linesRef.current.geometry.attributes.position.needsUpdate =
-      true;
+    /* Ambient slow drift for dust */
+    if (dustRef.current) {
+      dustRef.current.rotation.y = t * 0.015;
+      dustRef.current.rotation.x = Math.sin(t * 0.02) * 0.05;
+    }
   });
 
   return (
     <group>
-      {/* =====================================================
-          PARTICLE FIELD
-          ===================================================== */}
-
+      {/* Primary Data Nodes (Cyan) */}
       <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -183,22 +168,39 @@ export const ParticleNetwork: React.FC = () => {
             itemSize={3}
           />
         </bufferGeometry>
-
         <pointsMaterial
-          size={0.075}
+          size={0.08}
           color="#36D9FF"
           transparent
-          opacity={0.72}
+          opacity={0.8}
           sizeAttenuation
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </points>
 
-      {/* =====================================================
-          DATA CONNECTION NETWORK
-          ===================================================== */}
+      {/* Deep Analytical Dust (Orange/Amber) */}
+      <points ref={dustRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            count={dustCount}
+            array={dustPositions}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.06}
+          color="#FF7A30"
+          transparent
+          opacity={0.45}
+          sizeAttenuation
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </points>
 
+      {/* Data Connection Line Network */}
       <lineSegments ref={linesRef}>
         <bufferGeometry>
           <bufferAttribute
@@ -208,11 +210,10 @@ export const ParticleNetwork: React.FC = () => {
             itemSize={3}
           />
         </bufferGeometry>
-
         <lineBasicMaterial
           color="#36D9FF"
           transparent
-          opacity={0.09}
+          opacity={0.11}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
@@ -220,3 +221,4 @@ export const ParticleNetwork: React.FC = () => {
     </group>
   );
 };
+export default ParticleNetwork;
