@@ -14,7 +14,6 @@ import { Eligibility } from '../../sections/public/Eligibility/Eligibility';
 import { CampusInfo } from '../../sections/public/CampusInfo/CampusInfo';
 import { Rules } from '../../sections/public/Rules/Rules';
 import { Prizes } from '../../sections/public/Prizes/Prizes';
-import { FAQ } from '../../sections/public/FAQ/FAQ';
 import { Organizers } from '../../sections/public/Organizers/Organizers';
 import { CommunityCTA } from '../../sections/public/Community/CommunityCTA';
 import { ResultsSection } from '../../sections/public/Results/ResultsSection';
@@ -62,8 +61,6 @@ export const LandingPage: React.FC = () => {
         <CommunityCTA />
 
         <Organizers />
-
-        <FAQ />
 
         <ResultsSection />
 

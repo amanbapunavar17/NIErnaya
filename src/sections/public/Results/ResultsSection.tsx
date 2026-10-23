@@ -69,7 +69,7 @@ export const ResultsSection: React.FC = () => {
           </div>
 
           <h2 className="font-display text-3xl font-black tracking-tight text-white sm:text-5xl">
-            DATA DETECTIVE CHALLENGE RESULTS
+            NIErnaya RESULTS
           </h2>
 
           <p className="mt-3 text-sm leading-relaxed text-[#8B96A5] md:text-base">

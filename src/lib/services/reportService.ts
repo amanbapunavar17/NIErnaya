@@ -75,12 +75,12 @@ export class ReportService {
 
     doc.setFontSize(20);
     doc.setTextColor(255, 255, 255);
-    doc.text("NIErnaya — OFFICIAL DATA DETECTIVE CHALLENGE REPORT", 15, 25);
+    doc.text("NIErnaya — OFFICIAL REPORT", 15, 25);
 
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(54, 217, 255);
-    doc.text("DATA DETECTIVE CHALLENGE | 21 OCT – 06 NOV 2026", 15, 34);
+    doc.text("FROM DATA TO DECISION | 26 OCT – 13 NOV 2026", 15, 34);
 
     yPos = 55;
 
@@ -94,7 +94,7 @@ export class ReportService {
     doc.setFontSize(9.5);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(50, 50, 50);
-    const summaryText = "NIErnaya was organized by The National Institute of Engineering (NIE), Mysuru as a team-based Data Detective Challenge targeting 2nd Year (3rd Semester) engineering students across North and South campuses. The event was structured across three specialized phases: Data Hunt (Problem Formulation), Data Lab (EDA & Visualization), and Live Data Battle (Offline Finale at North Campus).";
+    const summaryText = "NIErnaya was organized by The National Institute of Engineering (NIE), Mysuru as a team-based competition targeting 2nd Year (3rd Semester) engineering students across North and South campuses. The event was structured across three specialized phases: Data Hunt (Problem Formulation), Data Lab (EDA & Visualization), and Live Data Battle (Offline Finale at North Campus).";
     const splitSummary = doc.splitTextToSize(summaryText, 180);
     doc.text(splitSummary, 15, yPos);
     yPos += (splitSummary.length * 5) + 6;
@@ -128,7 +128,7 @@ export class ReportService {
     doc.setTextColor(23, 58, 140);
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
-    doc.text("3. DATA DETECTIVE CHALLENGE PHASES & STRUCTURE", 15, yPos);
+    doc.text("3. NIErnaya PHASES & STRUCTURE", 15, yPos);
     yPos += 7;
 
     // Phase 1 criteria supplied by the CSE faculty committee.
@@ -287,11 +287,11 @@ export class ReportService {
       </head>
       <body>
         ${logoMarkup}
-        <h1>NIErnaya — OFFICIAL DATA DETECTIVE CHALLENGE REPORT</h1>
-        <div class="sub">The National Institute of Engineering (NIE), Mysuru | Data Analytics & Visualization Data Detective Challenge</div>
+        <h1>NIErnaya — OFFICIAL REPORT</h1>
+        <div class="sub">The National Institute of Engineering (NIE), Mysuru | Computer Science and Engineering</div>
         
         <h2>1. Executive Summary</h2>
-        <p>NIErnaya was organized by The National Institute of Engineering, Mysore for 2nd Year (3rd Semester) engineering students across all branches. The Data Detective Challenge was conducted in three progressive phases with structured phases and balanced faculty allocations.</p>
+        <p>NIErnaya was organized by Department of Computer Science and Engineering, The National Institute of Engineering, Mysore for 2nd Year (3rd Semester) engineering students across all branches. The Data Detective Challenge was conducted in three progressive phases with structured phases and balanced faculty allocations.</p>
 
         <h2>2. Participation Statistics</h2>
         <table>

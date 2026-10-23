@@ -166,7 +166,7 @@ export const StudentDashboard: React.FC = () => {
 
       if (!student) {
         throw new Error(
-          'Student profile not found. Please contact the Data Detective Challenge administrator.'
+          'Student profile not found. Please contact the NIErnaya administrator.'
         );
       }
 
@@ -390,18 +390,20 @@ export const StudentDashboard: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    void loadDashboard();
+useEffect(() => {
+  void loadDashboard();
 
-    if (!isSupabaseConfigured || !supabase) return;
+  const client = supabase;
 
-    const refreshVisiblePhases = async () => {
-      const { data: phaseRows, error: phaseError } = await supabase
-        .from('phases')
-        .select('id, name, slug, start_date, end_date, focus, description, campus_info, status, sort_order, public_visible')
-        .eq('public_visible', true)
-        .neq('status', 'hidden')
-        .order('sort_order', { ascending: true });
+  if (!isSupabaseConfigured || !client) return;
+
+  const refreshVisiblePhases = async () => {
+    const { data: phaseRows, error: phaseError } = await client
+      .from('phases')
+      .select('id, name, slug, start_date, end_date, focus, description, campus_info, status, sort_order, public_visible')
+      .eq('public_visible', true)
+      .neq('status', 'hidden')
+      .order('sort_order', { ascending: true });
 
       if (phaseError) {
         console.error('Student phase timeline refresh error:', phaseError);
@@ -413,18 +415,24 @@ export const StudentDashboard: React.FC = () => {
         : current);
     };
 
-    const channel = supabase
-      .channel('student-dashboard-phase-sync')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'phases' },
-        () => { void refreshVisiblePhases(); }
-      )
-      .subscribe();
+  const channel = client
+  .channel('student-dashboard-phase-sync')
+  .on(
+    'postgres_changes',
+    {
+      event: '*',
+      schema: 'public',
+      table: 'phases',
+    },
+    () => {
+      void refreshVisiblePhases();
+    }
+  )
+  .subscribe();
 
-    return () => {
-      void supabase.removeChannel(channel);
-    };
+return () => {
+  void client.removeChannel(channel);
+};
   }, []);
 
   const phaseCards = useMemo(() => {
@@ -731,7 +739,7 @@ export const StudentDashboard: React.FC = () => {
       <div className="p-6 rounded-2xl bg-[#0D1219] border border-white/10 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <h3 className="font-display font-bold text-lg text-white">
-            Data Detective Challenge Phase Progression
+            NIErnaya Phase Progression
           </h3>
 
           <span className="text-[10px] font-mono text-[#8B96A5]">

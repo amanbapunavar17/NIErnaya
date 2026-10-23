@@ -354,7 +354,7 @@ const handleDelete = async (id: string) => {
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <h1 className="font-display font-black text-2xl sm:text-3xl text-white">
-            Data Detective Challenge Results & Podium Publisher
+           NIErnaya Results & Podium Publisher
           </h1>
 
           <p className="text-xs text-[#8B96A5] mt-1">

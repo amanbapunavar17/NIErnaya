@@ -25,7 +25,7 @@ export const Themes: React.FC = () => {
           </div>
 
           <h2 className="font-display font-black text-3xl sm:text-5xl text-white tracking-tight">
-            DATA DETECTIVE CHALLENGE THEMES & TRACKS
+            NIErnaya THEMES & TRACKS
           </h2>
 
           <p className="text-sm md:text-base text-[#8B96A5]">

@@ -987,7 +987,7 @@ export const TeamRegistrationPage: React.FC = () => {
           <h1 className="font-display font-black text-2xl sm:text-3xl text-white">
             {existingTeam
               ? `Manage Squad: ${existingTeam.team_name}`
-              : 'Register New Data Detective Challenge Squad'}
+              : 'Register New NIErnaya Squad'}
           </h1>
 
           <p className="text-xs text-[#8B96A5] font-mono mt-2">

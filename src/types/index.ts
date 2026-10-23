@@ -173,7 +173,7 @@ export interface Faculty {
   designation: string;
   department: string;
 
-  // Internal role in the Data Detective Challenge
+  // Internal role in the NIErnaya Challenge / Faculty Committee
   // Example: "Chief Faculty Convener"
   role?: string | null;
 

@@ -166,48 +166,18 @@ export const Navbar: React.FC = () => {
   // NAVIGATION
   // ============================================================
 
-  const navLinks = [
-    {
-      label: 'ABOUT',
-      href: '#about',
-    },
-    {
-      label: 'PHASES',
-      href: '#phases',
-    },
-    {
-      label: 'TIMELINE',
-      href: '#timeline',
-    },
-    {
-      label: 'ELIGIBILITY',
-      href: '#eligibility',
-    },
-    {
-      label: 'RULES',
-      href: '#rules',
-    },
-    {
-      label: 'PRIZES',
-      href: '#prizes',
-    },
-    {
-      label: 'FACULTY',
-      href: '#organizers',
-    },
-    {
-      label: 'FAQ',
-      href: '#faq',
-    },
-    {
-      label: 'RESULTS',
-      href: '#results',
-    },
-    {
-      label: 'CONTACT',
-      href: '#contact',
-    },
-  ];
+
+const navLinks = [
+  { label: 'ABOUT', href: '#about' },
+  { label: 'PHASES', href: '#phases' },
+  { label: 'TIMELINE', href: '#timeline' },
+  { label: 'ELIGIBILITY', href: '#eligibility' },
+  { label: 'RULES & FAQ', href: '#rules' },
+  { label: 'PRIZES', href: '#prizes' },
+  { label: 'FACULTY', href: '#organizers' },
+  { label: 'RESULTS', href: '#results' },
+  { label: 'CONTACT', href: '#contact' },
+];
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
@@ -477,7 +447,7 @@ export const Navbar: React.FC = () => {
                   <LogIn className="w-4 h-4" />
 
                   <span>
-                    Access Data Detective Challenge Portal
+                    Access NIErnaya Portal
                   </span>
                 </>
               )}

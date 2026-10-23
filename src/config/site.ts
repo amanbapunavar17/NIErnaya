@@ -20,7 +20,7 @@ import type {
 export const SITE_CONFIG = {
   name: "NIErnaya",
 
-  tagline: "DATA TO DECISION",
+  tagline: "FROM DATA TO DECISION",
 
   subtitle: "DATA DETECTIVE CHALLENGE",
 
@@ -407,7 +407,7 @@ export const RULES_DATA: RuleItem[] = [
     title: "Locking & Immutability",
 
     content:
-      "Once a submission is locked or registration is finalized, changes cannot be made unless explicitly unlocked by the Data Detective Challenge Admin committee.",
+      "Once a submission is locked or registration is finalized, changes cannot be made unless explicitly unlocked by the NIErnaya Admin committee.",
 
     sort_order: 5,
 
@@ -550,7 +550,7 @@ export const FAQ_DATA: FAQItem[] = [
       "Can I participate individually without a team?",
 
     answer:
-      "No. NIErnaya is strictly a team Data Detective Challenge. Teams must have a minimum of 2 and a maximum of 3 members.",
+      "No. NIErnaya is strictly a team competition. Teams must have a minimum of 2 and a maximum of 3 members.",
 
     category: "Registration",
 
@@ -591,7 +591,7 @@ export const FAQ_DATA: FAQItem[] = [
     published: true,
   },
 
-  {
+  /*{
     id: "faq-5",
 
     question:
@@ -605,7 +605,7 @@ export const FAQ_DATA: FAQItem[] = [
     sort_order: 5,
 
     published: true,
-  },
+  },*/
 ];
 
 

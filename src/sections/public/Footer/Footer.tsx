@@ -68,7 +68,7 @@ export const Footer: React.FC = () => {
             </h3>
 
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#8B96A5]">
-              NIErnaya — From data to decision: A Data Detective Challenge,
+              NIErnaya — From data to decision is,
               conducted by the CSE Department of The National Institute
               of Engineering, Mysuru.
             </p>
@@ -141,6 +141,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
+         
           {/* ACADEMIC */}
           <div className="space-y-4 font-mono text-xs">
             <h4 className="font-display text-sm font-black uppercase tracking-wider text-white">
@@ -149,26 +150,28 @@ export const Footer: React.FC = () => {
 
             <ul className="space-y-3">
               <li>
-                <a href="#eligibility" className="transition-colors hover:text-[#36D9FF]">
+                <a
+                  href="#eligibility"
+                  className="transition-colors hover:text-[#36D9FF]"
+                >
                   Eligibility
                 </a>
               </li>
 
               <li>
-                <a href="#rules" className="transition-colors hover:text-[#36D9FF]">
-                  Rules & Guidelines
-                </a>
-              </li>
-
-
-              <li>
-                <a href="#faq" className="transition-colors hover:text-[#36D9FF]">
-                  FAQs
+                <a
+                  href="#rules"
+                  className="transition-colors hover:text-[#36D9FF]"
+                >
+                  Rules & FAQ
                 </a>
               </li>
 
               <li>
-                <a href="#contact" className="transition-colors hover:text-[#36D9FF]">
+                <a
+                  href="#contact"
+                  className="transition-colors hover:text-[#36D9FF]"
+                >
                   Contact
                 </a>
               </li>
@@ -182,15 +185,6 @@ export const Footer: React.FC = () => {
             </h4>
 
             <ul className="space-y-3">
-              <li>
-                <Link
-                  to="/student/team"
-                  className="font-bold text-[#FF7A30] transition-colors hover:text-[#FF9050]"
-                >
-                  
-                </Link>
-              </li>
-
               <li>
                 <Link
                   to="/login"
@@ -230,20 +224,44 @@ export const Footer: React.FC = () => {
               <ExternalLink className="h-3 w-3" />
             </a>
           </div>
+
         </div>
 
-        
-{/* DEVELOPER CREDIT STRIP */}
-<div className="mt-14 border-t border-white/10 pt-8">
-  <div className="mx-auto flex min-h-[140px] max-w-2xl items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
+
+{/* DEVELOPER / GUIDE STRIP */}
+<div className="mt-14 grid grid-cols-1 gap-5 border-t border-white/10 pt-8 md:grid-cols-2">
+
+  {/* GUIDED BY */}
+  <div className="flex min-h-[180px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
     <img
+      src="/assets/people/guide.jpg"
+      alt="Mr. Nishant R"
+className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
+
+    <div className="min-w-0">
+      <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#36D9FF]">
+        FACULTY MENTOR
+      </p>
+
+      <p className="mt-2 font-display text-lg font-bold text-white sm:text-xl">
+        Mr. Nishant R
+      </p>
+
+      <p className="mt-1 text-xs leading-relaxed text-[#8B96A5] sm:text-sm">
+        Assistant Professor • CSE Department
+      </p>
+    </div>
+  </div>
+
+  {/* DEVELOPER */}
+  <div className="flex min-h-[140px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
+
+  <img
       src="/assets/people/developer.jpeg"
       alt="Aman Bapunavar"
-      className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"
-    />
-
-    <div className="min-w-0 flex-1">
-      <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#FF7A30]">
+      className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
+          <div className="min-w-0">
+             <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#FF7A30]">
         DEVELOPED BY
       </p>
 
@@ -255,10 +273,10 @@ export const Footer: React.FC = () => {
         {SITE_CONFIG.developerCredit.department}
       </p>
     </div>
-
-    <Code2 className="hidden h-6 w-6 shrink-0 text-[#FF7A30] sm:block" />
-  </div>
+    <Code2 className="ml-auto hidden h-6 w-6 shrink-0 text-[#FF7A30] sm:block" />
+    </div>
 </div>
+          
 
 
 

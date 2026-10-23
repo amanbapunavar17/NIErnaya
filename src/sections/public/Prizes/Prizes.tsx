@@ -69,7 +69,7 @@ const METALLIC_THEMES = [
   },
   {
     name: 'bronze',
-    glowColor: '#D97706',
+    glowColor: '#d9770670',
     border: 'border-amber-700/40 hover:border-amber-600',
     gradient: 'from-amber-700/15 via-amber-700/5 to-transparent',
     textGlow: 'text-glow-bronze text-[#F59E0B]',

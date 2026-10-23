@@ -20,7 +20,7 @@ export const Eligibility: React.FC = () => {
       icon: CheckCircle,
       title: 'Eligible Branches',
       desc:
-        'CSE, AIML, ECE, EEE, ME, and CV students are eligible to participate.',
+        'All branches students are eligible to participate.',
     },
     {
       icon: ShieldCheck,

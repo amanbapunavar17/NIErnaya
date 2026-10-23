@@ -1074,7 +1074,7 @@ export const SubmissionPage: React.FC =
                 </h2>
 
                 <p className="max-w-xl mx-auto text-sm text-[#8B96A5] mt-4 leading-relaxed">
-                  The Data Detective Challenge Admin has not opened the
+                  The NIErnaya Admin has not opened the
                   submission portal for your team.
                 </p>
 

@@ -180,7 +180,7 @@ export const Mission: React.FC = () => {
             <span className="font-bold text-white">
               The National Institute of Engineering, Mysuru
             </span>
-            . The Data Detective Challenge is designed to transform data into meaningful
+            . The NIErnaya Challenge is designed to transform data into meaningful
             analysis, actionable insights, and domain-specific solutions.
           </p>
         </div>

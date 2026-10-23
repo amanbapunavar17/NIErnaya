@@ -77,12 +77,12 @@ function getCertificateDescription(data: CertificateData): string {
     case 'faculty':
       return 'for valuable academic guidance and mentorship provided during NIErnaya — From Data to Decision.';
     case 'organizer':
-      return 'in recognition of outstanding leadership, coordination, technical contribution, and dedication towards the successful execution of NIErnaya — Data Detective Challenge.';
+      return 'in recognition of outstanding leadership, coordination, technical contribution, and dedication towards the successful execution of NIErnaya — From Data to Decision.';
     case 'volunteer':
       return 'in appreciation of valuable volunteer service, teamwork, and dedicated support in conducting NIErnaya — From Data to Decision.';
     case 'participant':
     default:
-      return `for active and commendable participation in NIErnaya — Data Detective Challenge at The National Institute of Engineering, Mysuru.`;
+      return `for active and commendable participation in NIErnaya — From Data to Decision at The National Institute of Engineering, Mysuru.`;
   }
 }
 
@@ -145,7 +145,7 @@ export class CertificateService {
 
     doc.setFontSize(9.5);
     doc.setTextColor(BRAND.dark);
-    doc.text('DATA DETECTIVE CHALLENGE • 2026', 148.5, 62, { align: 'center' });
+    doc.text('FROM DATA TO DECISION • 2026', 148.5, 62, { align: 'center' });
 
     // Certificate title.
     doc.setFontSize(16);
