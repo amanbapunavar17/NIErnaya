@@ -61,7 +61,7 @@ const LEADERS = [
   {
     title: 'VICE-PRINCIPAL',
     name: 'Dr. Likith Kumar M V',
-    designation: 'Associate Professor',
+    designation: 'Vice-Principal',
     subtitle: 'The National Institute of Engineering, Mysuru',
     image: '/assets/people/vice-principal.png',
   },

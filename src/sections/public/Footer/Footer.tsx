@@ -233,39 +233,16 @@ export const Footer: React.FC = () => {
         </div>
 
         
-{/* DEVELOPER / GUIDE STRIP */}
-<div className="mt-14 grid grid-cols-1 gap-5 border-t border-white/10 pt-8 md:grid-cols-2">
-
-  {/* GUIDED BY */}
-  <div className="flex min-h-[180px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
-    <img
-      src="/assets/people/guide.jpg"
-      alt="Mr. Nishant R"
-className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
-
-    <div className="min-w-0">
-      <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#36D9FF]">
-        GUIDED BY
-      </p>
-
-      <p className="mt-2 font-display text-lg font-bold text-white sm:text-xl">
-        Mr. Nishant R
-      </p>
-
-      <p className="mt-1 text-xs leading-relaxed text-[#8B96A5] sm:text-sm">
-        Assistant Professor • CSE Department
-      </p>
-    </div>
-  </div>
-
-  {/* DEVELOPER */}
-  <div className="flex min-h-[140px] items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
+{/* DEVELOPER CREDIT STRIP */}
+<div className="mt-14 border-t border-white/10 pt-8">
+  <div className="mx-auto flex min-h-[140px] max-w-2xl items-center gap-5 rounded-2xl border border-white/10 bg-[#0A0E14] p-6 sm:p-7">
     <img
       src="/assets/people/developer.jpeg"
       alt="Aman Bapunavar"
-className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"    />
+      className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-28"
+    />
 
-    <div className="min-w-0">
+    <div className="min-w-0 flex-1">
       <p className="font-mono text-[11px] font-black uppercase tracking-[0.15em] text-[#FF7A30]">
         DEVELOPED BY
       </p>
@@ -279,9 +256,10 @@ className="h-24 w-24 shrink-0 rounded-2xl object-cover object-top sm:h-28 sm:w-2
       </p>
     </div>
 
-    <Code2 className="ml-auto hidden h-6 w-6 shrink-0 text-[#FF7A30] sm:block" />
+    <Code2 className="hidden h-6 w-6 shrink-0 text-[#FF7A30] sm:block" />
   </div>
 </div>
+
 
 
         {/* BOTTOM */}

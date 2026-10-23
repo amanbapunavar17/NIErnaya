@@ -347,7 +347,7 @@ export const RULES_DATA: RuleItem[] = [
     title: "Strict Eligibility",
 
     content:
-      "Only currently enrolled 2nd Year / 3rd Semester students from The National Institute of Engineering (NIE), Mysore across eligible engineering branches (CSE, AIML, ECE, EEE, ME, CV) are eligible.",
+      "Only currently enrolled 2nd Year / 3rd Semester students from The National Institute of Engineering (NIE), Mysore across eligible engineering branches (CSE, AIML, ECE, EEE, ME) are eligible.",
 
     sort_order: 1,
 
@@ -534,7 +534,7 @@ export const FAQ_DATA: FAQItem[] = [
       "Who is eligible to participate in NIErnaya?",
 
     answer:
-      "Only currently enrolled 2nd Year (3rd Semester) students of The National Institute of Engineering (NIE), Mysore from CSE, AIML, ECE, EEE, ME, and CV departments. Valid @nie.ac.in emails are required.",
+      "Only currently enrolled 2nd Year (3rd Semester) students of The National Institute of Engineering (NIE), Mysore from CSE, AIML, ECE, EEE, and ME departments. Valid @nie.ac.in emails are required.",
 
     category: "Eligibility",
 
