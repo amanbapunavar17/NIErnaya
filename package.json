@@ -11,10 +11,11 @@
   "dependencies": {
     "@react-three/drei": "^9.117.0",
     "@react-three/fiber": "^8.17.10",
-    "@supabase/supabase-js": "^2.43.4",
+    "@supabase/supabase-js": "^2.118.0",
     "canvas-confetti": "^1.9.3",
     "clsx": "^2.1.1",
     "docx": "^9.8.1",
+    "dotenv": "^18.0.9",
     "framer-motion": "^11.11.17",
     "gsap": "^3.12.5",
     "jspdf": "^2.5.2",

@@ -355,12 +355,7 @@ console.log('[LOGIN SESSION CHECK]', {
                   PASSWORD
                 </label>
 
-                <Link
-                  to="/forgot-password"
-                  className="text-[11px] font-mono text-[#FF7A30] hover:text-[#FF9050] hover:underline transition-colors"
-                >
-                  FORGOT PASSWORD?
-                </Link>
+                
 
               </div>
 

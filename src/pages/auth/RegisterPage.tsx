@@ -142,12 +142,22 @@ export const RegisterPage: React.FC = () => {
      * Only 2nd year / 3rd semester students are eligible.
      */
 
-    if (selectedYear !== 2 || selectedSemester !== 3) {
-      setError(
-        "NIErnaya registration is currently limited to 2nd year / 3rd semester students."
-      );
-      return;
-    }
+    const normalizedBranch = branch.trim().toUpperCase();
+
+const isExistingEligible =
+  selectedYear === 2 && selectedSemester === 3;
+
+const isSpecialEligible =
+  selectedYear === 3 &&
+  selectedSemester === 5 &&
+  ['ME', 'ECE'].includes(normalizedBranch);
+
+if (!isExistingEligible && !isSpecialEligible) {
+  setError(
+    'Your selected branch, year, and semester are not eligible for registration.'
+  );
+  return;
+}
 
     if (password.length < 8) {
       setError('Password must contain at least 8 characters.');
@@ -645,27 +655,31 @@ export const RegisterPage: React.FC = () => {
             )}
 
             {/* Eligibility reminder */}
-            {(year || semester) && (
-              <div
-                className={`p-3 rounded-xl border font-mono text-xs ${
-                  Number(year) === 2 && Number(semester) === 3
-                    ? 'bg-green-500/5 border-green-500/20 text-green-400'
-                    : 'bg-red-500/5 border-red-500/20 text-red-400'
-                }`}
-              >
-                {Number(year) === 2 && Number(semester) === 3 ? (
-                  <>
-                    ✓ You meet the current NIErnaya eligibility
-                    requirement.
-                  </>
-                ) : (
-                  <>
-                    Registration is currently available only for
-                    2nd year / 3rd semester students.
-                  </>
-                )}
-              </div>
-            )}
+{(year || semester) && (
+  <div
+    className={`p-3 rounded-xl border font-mono text-xs ${
+      (Number(year) === 2 && Number(semester) === 3) ||
+      (
+        Number(year) === 3 &&
+        Number(semester) === 5 &&
+        ['ME', 'ECE'].includes(branch.trim().toUpperCase())
+      )
+        ? 'bg-green-500/5 border-green-500/20 text-green-400'
+        : 'bg-red-500/5 border-red-500/20 text-red-400'
+    }`}
+  >
+    {(Number(year) === 2 && Number(semester) === 3) ||
+    (
+      Number(year) === 3 &&
+      Number(semester) === 5 &&
+      ['ME', 'ECE'].includes(branch.trim().toUpperCase())
+    ) ? (
+      <>✓ You are eligible to register.</>
+    ) : (
+      <>Your selected branch, year, and semester are not eligible for registration.</>
+    )}
+  </div>
+)}
 
             {/* Password */}
             <div className="space-y-1.5">
