@@ -80,6 +80,7 @@ type FacultyTeam = TeamRecord & {
 
 export const FacultyDashboard: React.FC = () => {
   const [faculty, setFaculty] = useState<FacultyRecord | null>(null);
+  const [phase1ResponseSheetUrl, setPhase1ResponseSheetUrl] = useState<string | null>(null);
   const [teams, setTeams] = useState<FacultyTeam[]>([]);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
 
@@ -195,6 +196,16 @@ export const FacultyDashboard: React.FC = () => {
         }
 
         setFaculty(facultyRow as FacultyRecord);
+
+      // Load this faculty member's Phase 1 response spreadsheet.
+        const { data: responseSheet, error: responseSheetError } = await supabase
+          .from('faculty_phase_response_sheets')
+          .select('response_sheet_url')
+          .eq('phase_number', 1)
+          .eq('faculty_id', facultyId)
+          .maybeSingle();
+        if (responseSheetError) throw responseSheetError;
+        setPhase1ResponseSheetUrl(responseSheet?.response_sheet_url ?? null);
 
         // --------------------------------------------------------
         // 3. Get faculty assignments
@@ -525,6 +536,17 @@ export const FacultyDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
+
+      {phase1ResponseSheetUrl && (
+        <section className="rounded-2xl border border-emerald-400/20 bg-[#0D1219] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <div className="text-[10px] font-mono font-bold tracking-[0.18em] text-emerald-300">PHASE 1 · DATA HUNT</div>
+            <h2 className="mt-2 text-xl font-black text-white">Team Dataset Responses</h2>
+            <p className="mt-1 text-sm text-[#8B96A5]">Open the response spreadsheet configured for your faculty account.</p>
+          </div>
+          <a href={phase1ResponseSheetUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400/30 px-4 py-3 text-sm font-bold text-emerald-200 hover:bg-emerald-400/10">Open response sheet <ExternalLink className="w-4 h-4" /></a>
+        </section>
+      )}
 
       {/* ======================================================
           ERROR

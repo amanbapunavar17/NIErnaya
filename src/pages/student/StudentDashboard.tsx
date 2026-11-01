@@ -7,6 +7,7 @@ import {
   ArrowRight,
   Loader2,
   AlertCircle,
+  ExternalLink,
 } from 'lucide-react';
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client';
@@ -79,6 +80,8 @@ type DashboardData = {
   members: StudentRow[];
   faculty: FacultyRow | null;
   submission: SubmissionRow | null;
+  phase1FormUrl: string | null;
+  phase1Accepting: boolean;
   phases: PhaseRow[];
 };
 
@@ -193,6 +196,8 @@ export const StudentDashboard: React.FC = () => {
       let members: StudentRow[] = [];
       let faculty: FacultyRow | null = null;
       let submission: SubmissionRow | null = null;
+      let phase1FormUrl: string | null = null;
+      let phase1Accepting = false;
 
       /* ---------------------------------------------------------
          4. If the student belongs to a team, load team data
@@ -313,6 +318,20 @@ export const StudentDashboard: React.FC = () => {
             if (facultyError) throw facultyError;
 
             faculty = facultyData;
+
+            // Load the Phase 1 form configured for this team's assigned faculty.
+            const { data: phase1Config, error: phase1ConfigError } = await supabase
+              .from('phase_submission_configs')
+              .select('form_url,is_visible,is_accepting_submissions')
+              .eq('phase_number', 1)
+              .eq('faculty_id', assignment.faculty_id)
+              .eq('is_visible', true)
+              .maybeSingle();
+            if (phase1ConfigError) throw phase1ConfigError;
+            if (phase1Config?.is_visible && phase1Config.form_url) {
+              phase1FormUrl = phase1Config.form_url;
+              phase1Accepting = Boolean(phase1Config.is_accepting_submissions);
+            }
           }
 
           /* -----------------------------------------------------
@@ -375,6 +394,8 @@ export const StudentDashboard: React.FC = () => {
         members,
         faculty,
         submission,
+        phase1FormUrl,
+        phase1Accepting,
         phases: (phasesData ?? []) as PhaseRow[],
       });
     } catch (err) {
@@ -494,10 +515,32 @@ return () => {
     );
   }
 
-  const { student, team, members, faculty, submission } = data;
+  const {
+    student,
+    team,
+    members,
+    faculty,
+    submission,
+    phase1FormUrl,
+    phase1Accepting,
+  } = data;
 
   return (
     <div className="space-y-8">
+      {team && phase1FormUrl && (
+        <section className="rounded-2xl border border-[#FF7A30]/30 bg-[#0D1219] p-5 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <div className="text-[10px] font-mono font-bold tracking-[0.18em] text-[#FF7A30]">PHASE 1 · DATA HUNT</div>
+              <h2 className="mt-2 text-xl font-black text-white">Dataset Submission Form</h2>
+              <p className="mt-1 text-sm text-[#8B96A5]">Use the form provided for your team’s assigned faculty member.</p>
+              <p className={`mt-2 text-xs font-bold ${phase1Accepting ? 'text-emerald-300' : 'text-amber-300'}`}>{phase1Accepting ? 'Website status: submissions marked open' : 'Website status: submissions not marked open'}</p>
+            </div>
+            <a href={phase1FormUrl} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF7A30] px-5 py-3 text-sm font-bold text-[#07090D] hover:bg-[#FF8C4B]">Open Phase 1 Form <ExternalLink className="w-4 h-4" /></a>
+          </div>
+          <p className="mt-3 text-[11px] text-[#8B96A5]">The form may be unavailable if the organizer has closed responses in Google Forms, regardless of this website status.</p>
+        </section>
+      )}
       {/* =========================================================
           TOP WELCOME BANNER
       ========================================================= */}

@@ -12,6 +12,7 @@ import {
   GraduationCap,
   Shuffle,
   UploadCloud,
+  ClipboardList,
   Calendar,
   FileText,
   Trophy,
@@ -134,6 +135,11 @@ export const AdminLayout: React.FC = () => {
       label: 'Phases & Timeline',
       href: '/admin/phases',
       icon: Calendar,
+    },
+    {
+      label: 'Phase 1 Google Forms',
+      href: '/admin/phase1-forms',
+      icon: ClipboardList,
     },
     {
       label: 'Content CMS',

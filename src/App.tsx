@@ -36,6 +36,7 @@ import { AdminTeamsPage } from './pages/admin/AdminTeamsPage';
 import { AdminStudentsPage } from './pages/admin/AdminStudentsPage';
 import { AdminFacultyPage } from './pages/admin/AdminFacultyPage';
 import { AdminAllocationPage } from './pages/admin/AdminAllocationPage';
+import { AdminPhase1FormsPage } from './pages/admin/AdminPhase1FormsPage';
 import { AdminSubmissionsPage } from './pages/admin/AdminSubmissionsPage';
 import { AdminPhasesPage } from './pages/admin/AdminPhasesPage';
 import { AdminCMSPage } from './pages/admin/AdminCMSPage';
@@ -228,6 +229,11 @@ const AppContent: React.FC = () => {
             <Route
               path="phases"
               element={<AdminPhasesPage />}
+            />
+
+            <Route
+              path="phase1-forms"
+              element={<AdminPhase1FormsPage />}
             />
 
             <Route
