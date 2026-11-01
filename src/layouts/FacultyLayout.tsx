@@ -9,6 +9,7 @@ import {
 import {
   LayoutDashboard,
   Users,
+  ClipboardCheck,
   LogOut,
   ArrowLeft,
 } from 'lucide-react';
@@ -99,6 +100,11 @@ export const FacultyLayout: React.FC = () => {
       label: 'Assigned Squads',
       href: '/faculty/teams',
       icon: Users,
+    },
+    {
+      label: 'Phase 1 Evaluation',
+      href: '/faculty/phase1-evaluation',
+      icon: ClipboardCheck,
     },
   ];
 

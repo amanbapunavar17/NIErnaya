@@ -13,6 +13,7 @@ import {
   Shuffle,
   UploadCloud,
   ClipboardList,
+  ClipboardCheck,
   Calendar,
   FileText,
   Trophy,
@@ -140,6 +141,11 @@ export const AdminLayout: React.FC = () => {
       label: 'Phase 1 Google Forms',
       href: '/admin/phase1-forms',
       icon: ClipboardList,
+    },
+    {
+      label: 'Phase 1 Shortlist',
+      href: '/admin/phase1-shortlist',
+      icon: ClipboardCheck,
     },
     {
       label: 'Content CMS',

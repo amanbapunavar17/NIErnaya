@@ -29,6 +29,7 @@ import { SubmissionPage } from './pages/student/SubmissionPage';
 // Faculty Pages
 import { FacultyDashboard } from './pages/faculty/FacultyDashboard';
 import { FacultyTeamsPage } from './pages/faculty/FacultyTeamsPage';
+import { FacultyPhase1EvaluationPage } from './pages/faculty/FacultyPhase1EvaluationPage';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
@@ -44,6 +45,7 @@ import { AdminResultsPage } from './pages/admin/AdminResultsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminCertificatesPage } from './pages/admin/AdminCertificatesPage';
 import { AdminAuditPage } from './pages/admin/AdminAuditPage';
+import { AdminPhase1ShortlistPage } from './pages/admin/AdminPhase1ShortlistPage';
 
 /**
  * Public landing page gets the persistent 3D environment.
@@ -176,6 +178,11 @@ const AppContent: React.FC = () => {
               path="teams"
               element={<FacultyTeamsPage />}
             />
+
+            <Route
+              path="phase1-evaluation"
+              element={<FacultyPhase1EvaluationPage />}
+            />
           </Route>
 
           {/* =====================================================
@@ -244,6 +251,11 @@ const AppContent: React.FC = () => {
             <Route
               path="results"
               element={<AdminResultsPage />}
+            />
+
+            <Route
+              path="phase1-shortlist"
+              element={<AdminPhase1ShortlistPage />}
             />
 
             <Route
