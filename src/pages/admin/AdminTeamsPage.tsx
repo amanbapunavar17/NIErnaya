@@ -157,6 +157,12 @@ export const AdminTeamsPage: React.FC = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCampus, setFilterCampus] = useState('all');
+  const [filterBranch, setFilterBranch] = useState('all');
+  const [filterSection, setFilterSection] = useState('all');
+  const [filterFaculty, setFilterFaculty] = useState('all');
+  const [filterAllocation, setFilterAllocation] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterSdg, setFilterSdg] = useState('all');
 
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -517,9 +523,30 @@ export const AdminTeamsPage: React.FC = () => {
   // FILTERED TEAMS
   // ==========================================================
 
+  const availableBranches = useMemo(
+    () => Array.from(new Set(
+      teams.flatMap((team) => team.members.map((member) => member.branch).filter((value): value is string => Boolean(value?.trim())))
+    )).sort((a, b) => a.localeCompare(b)),
+    [teams]
+  );
+
+  const availableSections = useMemo(
+    () => Array.from(new Set(
+      teams.flatMap((team) => team.members.map((member) => member.section).filter((value): value is string => Boolean(value?.trim())))
+    )).sort((a, b) => a.localeCompare(b)),
+    [teams]
+  );
+
+  const facultyWorkload = useMemo(
+    () => faculty.map((member) => ({
+      ...member,
+      teamCount: teams.filter((team) => team.assigned_faculty_id === member.id).length,
+    })),
+    [faculty, teams]
+  );
+
   const filteredTeams = useMemo(() => {
-    const search =
-      searchTerm.trim().toLowerCase();
+    const search = searchTerm.trim().toLowerCase();
 
     return teams.filter((team) => {
       const matchesSearch =
@@ -528,25 +555,44 @@ export const AdminTeamsPage: React.FC = () => {
         team.team_code.toLowerCase().includes(search) ||
         team.leader_name.toLowerCase().includes(search) ||
         team.leader_email.toLowerCase().includes(search) ||
-        (team.problem_statement ?? '')
-          .toLowerCase()
-          .includes(search) ||
-        getSdgName(team.selected_sdg)
-          .toLowerCase()
-          .includes(search) ||
-        team.members.some(
-          (member) =>
-            member.name.toLowerCase().includes(search) ||
-            member.usn.toLowerCase().includes(search)
+        (team.problem_statement ?? '').toLowerCase().includes(search) ||
+        getSdgName(team.selected_sdg).toLowerCase().includes(search) ||
+        team.members.some((member) =>
+          member.name.toLowerCase().includes(search) ||
+          member.usn.toLowerCase().includes(search)
         );
 
-      const matchesCampus =
-        filterCampus === 'all' ||
-        team.campus === filterCampus;
+      const matchesCampus = filterCampus === 'all' || team.campus === filterCampus;
+      // Branch and section filters inspect the full roster, not only the leader.
+      const matchesBranch = filterBranch === 'all' ||
+        team.members.some((member) => member.branch?.toLowerCase() === filterBranch.toLowerCase());
+      const matchesSection = filterSection === 'all' ||
+        team.members.some((member) => member.section?.toUpperCase() === filterSection.toUpperCase());
+      const matchesFaculty = filterFaculty === 'all' || team.assigned_faculty_id === filterFaculty;
+      const matchesAllocation = filterAllocation === 'all' ||
+        (filterAllocation === 'assigned' ? Boolean(team.assigned_faculty_id) : !team.assigned_faculty_id);
+      const matchesStatus = filterStatus === 'all' || team.registration_status === filterStatus;
+      const matchesSdg = filterSdg === 'all' ||
+        (filterSdg === 'none' ? team.selected_sdg === null : team.selected_sdg === Number(filterSdg));
 
-      return matchesSearch && matchesCampus;
+      return matchesSearch && matchesCampus && matchesBranch && matchesSection &&
+        matchesFaculty && matchesAllocation && matchesStatus && matchesSdg;
     });
-  }, [teams, searchTerm, filterCampus]);
+  }, [
+    teams, searchTerm, filterCampus, filterBranch, filterSection,
+    filterFaculty, filterAllocation, filterStatus, filterSdg,
+  ]);
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilterCampus('all');
+    setFilterBranch('all');
+    setFilterSection('all');
+    setFilterFaculty('all');
+    setFilterAllocation('all');
+    setFilterStatus('all');
+    setFilterSdg('all');
+  };
 
   // ==========================================================
   // LOCK / UNLOCK REGISTRATION
@@ -903,6 +949,69 @@ export const AdminTeamsPage: React.FC = () => {
             <option value="North">North Campus</option>
             <option value="South">South Campus</option>
           </select>
+        </div>
+      </div>
+
+      {/* ADVANCED FILTERS */}
+      <div className="space-y-3 rounded-2xl border border-white/10 bg-[#0D1219] p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h2 className="font-mono text-xs font-bold text-white">ADVANCED FILTERS</h2>
+            <p className="mt-1 text-[10px] text-[#8B96A5]">Branch and section filters search every member in the team roster.</p>
+          </div>
+          <button type="button" onClick={resetFilters} className="rounded-lg border border-white/10 px-3 py-2 font-mono text-[10px] text-[#36D9FF] hover:bg-white/5">CLEAR FILTERS</button>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <select value={filterBranch} onChange={(event) => setFilterBranch(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All Branches</option>
+            {availableBranches.map((branch) => <option key={branch} value={branch}>{branch}</option>)}
+          </select>
+          <select value={filterSection} onChange={(event) => setFilterSection(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All Sections</option>
+            {availableSections.map((section) => <option key={section} value={section}>{section} Section</option>)}
+          </select>
+          <select value={filterFaculty} onChange={(event) => setFilterFaculty(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All Faculty</option>
+            {faculty.map((member) => <option key={member.id} value={member.id}>{member.name}</option>)}
+          </select>
+          <select value={filterAllocation} onChange={(event) => setFilterAllocation(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All Allocation States</option>
+            <option value="assigned">Assigned</option>
+            <option value="unassigned">Unassigned</option>
+          </select>
+          <select value={filterStatus} onChange={(event) => setFilterStatus(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All Registration Statuses</option>
+            <option value="locked">Locked</option>
+            <option value="submitted">Submitted</option>
+            <option value="draft">Draft</option>
+          </select>
+          <select value={filterSdg} onChange={(event) => setFilterSdg(event.target.value)} className="rounded-xl border border-white/10 bg-[#121A23] px-3 py-2.5 font-mono text-xs text-white">
+            <option value="all">All SDGs</option>
+            <option value="none">No SDG Selected</option>
+            {[2, 3, 4, 5, 13].map((sdg) => <option key={sdg} value={String(sdg)}>SDG {sdg} – {getSdgName(sdg)}</option>)}
+          </select>
+        </div>
+      </div>
+
+      {/* FACULTY WORKLOAD */}
+      <div className="rounded-2xl border border-white/10 bg-[#0D1219] p-4">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-mono text-xs font-bold text-white">FACULTY-WISE TEAM ALLOCATION</h2>
+          <span className="text-[10px] text-[#8B96A5]">Live counts from current assignments</span>
+        </div>
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {facultyWorkload.map((member) => (
+            <button
+              key={member.id}
+              type="button"
+              onClick={() => setFilterFaculty((current) => current === member.id ? 'all' : member.id)}
+              className={`rounded-xl border p-3 text-left transition-colors ${filterFaculty === member.id ? 'border-[#36D9FF] bg-[#36D9FF]/10' : 'border-white/10 bg-[#121A23] hover:border-white/20'}`}
+            >
+              <div className="truncate text-xs font-semibold text-white">{member.name}</div>
+              <div className="mt-1 font-display text-xl font-black text-[#36D9FF]">{member.teamCount}</div>
+              <div className="text-[9px] uppercase tracking-wide text-[#8B96A5]">assigned teams · click to filter</div>
+            </button>
+          ))}
         </div>
       </div>
 
