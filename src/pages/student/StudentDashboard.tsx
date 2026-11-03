@@ -705,7 +705,7 @@ return () => {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="font-mono text-xs text-[#8B96A5]">
-                  PHASE 1 SUBMISSION
+                  PHASE 2 SUBMISSION
                 </span>
 
                 <FileText className="w-4 h-4 text-[#10B981]" />
