@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CheckCircle2,
@@ -111,7 +112,11 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
   const [editing, setEditing] = useState<TeamRow | null>(null);
   const [draft, setDraft] = useState<Marks>(emptyMarks);
 
-  const required = requiredFor(rows.length);
+  // Temporary exception: Dr. Anita's current 18-team allocation.
+  // Assumes no other faculty member has exactly 18 allocated teams.
+  const isAnitaTemporaryException = rows.length === 18;
+
+  const required = isAnitaTemporaryException ? 8 : requiredFor(rows.length);
   const maxAllowed = required ? required + 2 : 0;
 
   const ranked = useMemo(
@@ -124,7 +129,14 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
     [rows]
   );
 
-  const evaluatedCount = rows.filter((r) => r.marks).length;
+  const evaluatedRows = ranked.filter((r) => r.marks !== null);
+  const evaluatedCount = evaluatedRows.length;
+
+  // Normal faculty must evaluate every assigned team.
+  // Temporary exception allows selection from already evaluated teams.
+  const canConfirmEvaluation =
+    isAnitaTemporaryException ||
+    evaluatedCount === rows.length;
 
   const load = useCallback(async () => {
     if (!supabase) {
@@ -159,6 +171,8 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
 
       if (!ids.length) {
         setRows([]);
+        setSelected([]);
+        setConfirmed(false);
         return;
       }
 
@@ -224,12 +238,8 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
       setConfirmed(Boolean(shortlist));
 
       if (!shortlist) {
-        const alreadySelected = selected.filter((id) =>
-          ids.includes(id)
-        );
-
-        setSelected(
-          alreadySelected.length ? alreadySelected : []
+        setSelected((current) =>
+          current.filter((id) => ids.includes(id))
         );
       }
     } catch (e: any) {
@@ -243,25 +253,28 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
     void load();
   }, [load]);
 
+  // Automatically recommend the highest-scoring evaluated teams.
   useEffect(() => {
     if (
-      !confirmed &&
-      rows.length &&
-      evaluatedCount === rows.length &&
-      required &&
-      selected.length === 0
+      confirmed ||
+      selected.length > 0 ||
+      !required ||
+      evaluatedCount < required ||
+      !canConfirmEvaluation
     ) {
-      setSelected(
-        ranked.slice(0, required).map((r) => r.id)
-      );
+      return;
     }
+
+    setSelected(
+      evaluatedRows.slice(0, required).map((r) => r.id)
+    );
   }, [
     confirmed,
-    rows,
-    evaluatedCount,
-    required,
-    ranked,
     selected.length,
+    required,
+    evaluatedCount,
+    canConfirmEvaluation,
+    evaluatedRows,
   ]);
 
   const openEvaluation = (row: TeamRow) => {
@@ -298,10 +311,8 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
         p_dataset_quality: draft.dataset_quality,
         p_authenticity_credibility:
           draft.authenticity_credibility,
-        p_data_volume_diversity:
-          draft.data_volume_diversity,
-        p_analytical_potential:
-          draft.analytical_potential,
+        p_data_volume_diversity: draft.data_volume_diversity,
+        p_analytical_potential: draft.analytical_potential,
         p_sdg_relevance: draft.sdg_relevance,
       };
 
@@ -313,6 +324,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
       if (rpcError) throw rpcError;
 
       setEditing(null);
+      setSelected([]);
       setNotice(`Evaluation saved for ${editing.team_name}.`);
 
       await load();
@@ -327,14 +339,21 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
     setSelected((current) =>
       current.includes(id)
         ? current.filter((x) => x !== id)
-        : [...current, id]
+        : current.length < maxAllowed
+          ? [...current, id]
+          : current
     );
   };
 
   const confirmShortlist = async () => {
     if (!supabase) return;
 
-    if (evaluatedCount !== rows.length) {
+    if (selected.some((id) => !evaluatedRows.some((r) => r.id === id))) {
+      setError('Only evaluated teams can be shortlisted.');
+      return;
+    }
+
+    if (!canConfirmEvaluation) {
       setError('Evaluate every assigned team before confirming.');
       return;
     }
@@ -395,7 +414,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
           </h1>
 
           <p className="text-sm text-[#8B96A5] mt-1">
-            Evaluate all assigned teams, review the automatic ranking,
+            Evaluate assigned teams, review the automatic ranking,
             then confirm your shortlist.
           </p>
         </div>
@@ -429,6 +448,14 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
         </p>
       ) : (
         <>
+          {isAnitaTemporaryException && (
+            <div className="p-3 rounded-lg border border-violet-500/30 bg-violet-500/10 text-violet-200 text-sm">
+              Temporary Phase 1 arrangement: select 8 mandatory
+              teams and up to 2 additional teams. Only evaluated
+              teams can be shortlisted.
+            </div>
+          )}
+
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {[
               ['Assigned teams', rows.length],
@@ -440,9 +467,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
                 key={String(label)}
                 className="p-4 rounded-xl bg-[#0D1219] border border-white/10"
               >
-                <p className="text-xs text-[#8B96A5]">
-                  {label}
-                </p>
+                <p className="text-xs text-[#8B96A5]">{label}</p>
                 <p className="text-2xl font-bold text-white mt-1">
                   {value}
                 </p>
@@ -461,9 +486,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
           <section className="rounded-2xl border border-white/10 bg-[#0D1219] overflow-hidden">
             <div className="p-4 border-b border-white/10 flex items-center justify-between">
               <div>
-                <h2 className="font-bold text-white">
-                  Assigned teams
-                </h2>
+                <h2 className="font-bold text-white">Assigned teams</h2>
                 <p className="text-xs text-[#8B96A5] mt-1">
                   Marks are calculated automatically out of 50.
                 </p>
@@ -535,19 +558,20 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
 
           <section className="rounded-2xl border border-white/10 bg-[#0D1219] overflow-hidden">
             <div className="p-4 border-b border-white/10">
-              <h2 className="font-bold text-white">
-                Shortlist preview
-              </h2>
+              <h2 className="font-bold text-white">Shortlist preview</h2>
 
               <p className="text-xs text-[#8B96A5] mt-1">
-                Top {required} by marks are recommended automatically.
-                You may select up to 2 additional teams.
+                Top {required} evaluated teams by marks are recommended
+                automatically. You may select up to 2 additional teams.
               </p>
             </div>
 
             <div className="p-4 space-y-3">
-              {ranked.map((row, index) => {
-                const recommended = index < required;
+      {ranked.map((row) => {
+                  const recommended =
+                  evaluatedRows.findIndex((r) => r.id === row.id) < required &&
+                  Boolean(row.marks);
+
                 const checked = selected.includes(row.id);
 
                 return (
@@ -565,7 +589,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
                       disabled={
                         confirmed ||
                         !row.marks ||
-                        evaluatedCount !== rows.length ||
+                        !canConfirmEvaluation ||
                         (!checked && selected.length >= maxAllowed)
                       }
                       onChange={() => toggleSelection(row.id)}
@@ -579,9 +603,11 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
 
                       <span className="block text-xs text-[#8B96A5]">
                         {row.team_code} ·{' '}
-                        {recommended
-                          ? 'Marks-based recommendation'
-                          : 'Additional faculty selection'}
+                        {!row.marks
+                          ? 'Evaluation pending'
+                          : recommended
+                            ? 'Marks-based recommendation'
+                            : 'Additional faculty selection'}
                       </span>
                     </span>
 
@@ -606,7 +632,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
                     confirmed ||
                     confirming ||
                     !required ||
-                    evaluatedCount !== rows.length ||
+                    !canConfirmEvaluation ||
                     selected.length < required ||
                     selected.length > maxAllowed
                   }
@@ -697,10 +723,7 @@ export const FacultyPhase1EvaluationPage: React.FC = () => {
                         ...d,
                         [c.key]: Math.min(
                           c.max,
-                          Math.max(
-                            0,
-                            Number(e.target.value) || 0
-                          )
+                          Math.max(0, Number(e.target.value) || 0)
                         ),
                       }))
                     }
