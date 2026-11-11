@@ -147,6 +147,7 @@ export const AdminLayout: React.FC = () => {
       href: '/admin/phase1-shortlist',
       icon: ClipboardCheck,
     },
+    { label: 'Phase 2 Management', href: '/admin/phase2-management', icon: ClipboardList },
     {
       label: 'Content CMS',
       href: '/admin/content',

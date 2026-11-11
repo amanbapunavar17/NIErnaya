@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   Users,
   ClipboardCheck,
+  ClipboardList,
   LogOut,
   ArrowLeft,
 } from 'lucide-react';
@@ -106,6 +107,7 @@ export const FacultyLayout: React.FC = () => {
       href: '/faculty/phase1-evaluation',
       icon: ClipboardCheck,
     },
+    { label: 'Phase 2 Faculty', href: '/faculty/phase2', icon: ClipboardList },
   ];
 
   return (

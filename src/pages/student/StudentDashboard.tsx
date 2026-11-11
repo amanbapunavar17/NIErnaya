@@ -74,6 +74,12 @@ type PhaseRow = {
   public_visible: boolean;
 };
 
+type Phase2AssignmentInfo = {
+  team_id: string; team_name: string; team_code: string;
+  coordinator_name: string; coordinator_designation: string | null; coordinator_photo_url: string | null;
+  jury_name: string; jury_designation: string | null; jury_photo_url: string | null;
+};
+
 type DashboardData = {
   student: StudentRow;
   team: TeamRow | null;
@@ -82,6 +88,7 @@ type DashboardData = {
   submission: SubmissionRow | null;
   phase1FormUrl: string | null;
   phase1Accepting: boolean;
+  phase2Assignment: Phase2AssignmentInfo | null;
   phases: PhaseRow[];
 };
 
@@ -198,6 +205,7 @@ export const StudentDashboard: React.FC = () => {
       let submission: SubmissionRow | null = null;
       let phase1FormUrl: string | null = null;
       let phase1Accepting = false;
+      let phase2Assignment: Phase2AssignmentInfo | null = null;
 
       /* ---------------------------------------------------------
          4. If the student belongs to a team, load team data
@@ -226,6 +234,10 @@ export const StudentDashboard: React.FC = () => {
         team = teamData;
 
         if (team) {
+          const { data: phase2Data, error: phase2Error } = await supabase.rpc('get_my_phase2_assignment');
+          if (phase2Error) throw phase2Error;
+          phase2Assignment = (phase2Data ?? null) as Phase2AssignmentInfo | null;
+
           /* -----------------------------------------------------
              5. Load team members
           ----------------------------------------------------- */
@@ -396,6 +408,7 @@ export const StudentDashboard: React.FC = () => {
         submission,
         phase1FormUrl,
         phase1Accepting,
+        phase2Assignment,
         phases: (phasesData ?? []) as PhaseRow[],
       });
     } catch (err) {
@@ -523,6 +536,7 @@ return () => {
     submission,
     phase1FormUrl,
     phase1Accepting,
+    phase2Assignment,
   } = data;
 
   return (
@@ -777,8 +791,32 @@ return () => {
       )}
 
       {/* =========================================================
-          PHASE ROADMAP
-      ========================================================= */}
+      {/* PHASE 2 FACULTY + JURY ASSIGNMENT */}
+      {team && (
+        <section className="p-6 rounded-2xl bg-[#0D1219] border border-[#36D9FF]/20 space-y-4">
+          <div>
+            <p className="text-[10px] font-mono font-bold tracking-[0.18em] text-[#36D9FF]">PHASE 2 · EVALUATION PANEL</p>
+            <h3 className="mt-2 font-display font-bold text-lg text-white">Your Assigned Faculty & Jury</h3>
+            <p className="mt-1 text-xs text-[#8B96A5]">Your team must present in front of both assigned panel members.</p>
+          </div>
+          {phase2Assignment ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#121A23] border border-white/5">
+                {phase2Assignment.coordinator_photo_url ? <img src={phase2Assignment.coordinator_photo_url} alt={phase2Assignment.coordinator_name} className="w-16 h-16 rounded-xl object-cover" /> : <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center text-[10px] text-[#8B96A5]">PHOTO</div>}
+                <div><p className="text-[10px] font-mono text-[#FF7A30]">FACULTY COORDINATOR</p><p className="font-bold text-white">{phase2Assignment.coordinator_name}</p><p className="text-xs text-[#8B96A5]">{phase2Assignment.coordinator_designation || 'Faculty Coordinator'}</p></div>
+              </div>
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#121A23] border border-white/5">
+                {phase2Assignment.jury_photo_url ? <img src={phase2Assignment.jury_photo_url} alt={phase2Assignment.jury_name} className="w-16 h-16 rounded-xl object-cover" /> : <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center text-[10px] text-[#8B96A5]">PHOTO</div>}
+                <div><p className="text-[10px] font-mono text-[#FF7A30]">JURY MEMBER</p><p className="font-bold text-white">{phase2Assignment.jury_name}</p><p className="text-xs text-[#8B96A5]">{phase2Assignment.jury_designation || 'Jury Member'}</p></div>
+              </div>
+            </div>
+          ) : (
+            <div className="p-4 rounded-xl bg-[#121A23] border border-white/5 text-sm text-[#8B96A5]">Your Phase 2 panel assignment is not available yet. Please check again after the administrator assigns your team.</div>
+          )}
+        </section>
+      )}
+
+          
       <div className="p-6 rounded-2xl bg-[#0D1219] border border-white/10 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <h3 className="font-display font-bold text-lg text-white">
