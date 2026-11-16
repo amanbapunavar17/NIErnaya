@@ -8,6 +8,8 @@ import {
   Loader2,
   AlertCircle,
   ExternalLink,
+  X,
+  CalendarClock,
 } from 'lucide-react';
 
 import { supabase, isSupabaseConfigured } from '../../lib/supabase/client';
@@ -74,12 +76,6 @@ type PhaseRow = {
   public_visible: boolean;
 };
 
-type Phase2AssignmentInfo = {
-  team_id: string; team_name: string; team_code: string;
-  coordinator_name: string; coordinator_designation: string | null; coordinator_photo_url: string | null;
-  jury_name: string; jury_designation: string | null; jury_photo_url: string | null;
-};
-
 type DashboardData = {
   student: StudentRow;
   team: TeamRow | null;
@@ -88,7 +84,6 @@ type DashboardData = {
   submission: SubmissionRow | null;
   phase1FormUrl: string | null;
   phase1Accepting: boolean;
-  phase2Assignment: Phase2AssignmentInfo | null;
   phases: PhaseRow[];
 };
 
@@ -121,6 +116,26 @@ export const StudentDashboard: React.FC = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Phase 2 deadline is 17 November 2026, 11:59 PM IST.
+  const phase2Deadline = new Date('2026-11-17T23:59:59+05:30').getTime();
+  const [showPhase2DeadlineNotice, setShowPhase2DeadlineNotice] = useState(
+    () => Date.now() <= phase2Deadline
+  );
+
+  // Automatically hide the deadline notice once the deadline has passed.
+  useEffect(() => {
+    const remaining = phase2Deadline - Date.now();
+    if (remaining <= 0) {
+      setShowPhase2DeadlineNotice(false);
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setShowPhase2DeadlineNotice(false);
+    }, remaining);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [phase2Deadline]);
 
   const loadDashboard = async () => {
     if (!isSupabaseConfigured || !supabase) {
@@ -205,7 +220,6 @@ export const StudentDashboard: React.FC = () => {
       let submission: SubmissionRow | null = null;
       let phase1FormUrl: string | null = null;
       let phase1Accepting = false;
-      let phase2Assignment: Phase2AssignmentInfo | null = null;
 
       /* ---------------------------------------------------------
          4. If the student belongs to a team, load team data
@@ -234,10 +248,6 @@ export const StudentDashboard: React.FC = () => {
         team = teamData;
 
         if (team) {
-          const { data: phase2Data, error: phase2Error } = await supabase.rpc('get_my_phase2_assignment');
-          if (phase2Error) throw phase2Error;
-          phase2Assignment = (phase2Data ?? null) as Phase2AssignmentInfo | null;
-
           /* -----------------------------------------------------
              5. Load team members
           ----------------------------------------------------- */
@@ -408,7 +418,6 @@ export const StudentDashboard: React.FC = () => {
         submission,
         phase1FormUrl,
         phase1Accepting,
-        phase2Assignment,
         phases: (phasesData ?? []) as PhaseRow[],
       });
     } catch (err) {
@@ -536,11 +545,74 @@ return () => {
     submission,
     phase1FormUrl,
     phase1Accepting,
-    phase2Assignment,
   } = data;
 
   return (
     <div className="space-y-8">
+      {showPhase2DeadlineNotice && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="phase2-deadline-title"
+        >
+          <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-[#FF7A30]/40 bg-[#0D1219] p-6 shadow-2xl sm:p-8">
+            <button
+              type="button"
+              onClick={() => setShowPhase2DeadlineNotice(false)}
+              aria-label="Close deadline notice"
+              className="absolute right-4 top-4 rounded-lg p-2 text-[#8B96A5] transition hover:bg-white/10 hover:text-white"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FF7A30]/15 text-[#FF7A30]">
+              <CalendarClock className="h-6 w-6" />
+            </div>
+
+            <div className="font-mono text-[10px] font-bold tracking-[0.2em] text-[#FF7A30]">
+              IMPORTANT · PHASE 2 EVALUATION
+            </div>
+            <h2
+              id="phase2-deadline-title"
+              className="mt-3 text-2xl font-black leading-tight text-white sm:text-3xl"
+            >
+              Final Presentation Deadline
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-[#B8C2D0]">
+              All shortlisted teams must complete their presentation in front of
+              both their assigned Faculty Coordinator and Jury Member. Please
+              approach your assigned panel and finish your evaluation within the
+              deadline.
+            </p>
+
+            <div className="mt-6 rounded-2xl border border-[#FF7A30]/30 bg-[#FF7A30]/10 p-4">
+              <div className="text-[10px] font-mono font-bold tracking-widest text-[#FFB17F]">
+                FINAL DEADLINE · TOMORROW
+              </div>
+              <div className="mt-1 text-xl font-black text-[#FF8C4B] sm:text-2xl">
+                17 November 2026 (Tuesday)
+              </div>
+              <div className="mt-1 text-xs font-semibold text-white">
+                11:59 PM IST
+              </div>
+            </div>
+
+            <p className="mt-4 text-xs font-bold text-rose-300">
+              No further extension will be provided. Teams that do not complete
+              their evaluation by the deadline may be disqualified.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setShowPhase2DeadlineNotice(false)}
+              className="mt-6 w-full rounded-xl bg-[#FF7A30] px-5 py-3 font-mono text-xs font-bold text-[#07090D] transition hover:bg-[#FF8C4B]"
+            >
+              UNDERSTOOD
+            </button>
+          </div>
+        </div>
+      )}
       {team && phase1FormUrl && (
         <section className="rounded-2xl border border-[#FF7A30]/30 bg-[#0D1219] p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -719,7 +791,7 @@ return () => {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="font-mono text-xs text-[#8B96A5]">
-                  PHASE 2 SUBMISSION
+                  PHASE 1 SUBMISSION
                 </span>
 
                 <FileText className="w-4 h-4 text-[#10B981]" />
@@ -791,32 +863,8 @@ return () => {
       )}
 
       {/* =========================================================
-      {/* PHASE 2 FACULTY + JURY ASSIGNMENT */}
-      {team && (
-        <section className="p-6 rounded-2xl bg-[#0D1219] border border-[#36D9FF]/20 space-y-4">
-          <div>
-            <p className="text-[10px] font-mono font-bold tracking-[0.18em] text-[#36D9FF]">PHASE 2 · EVALUATION PANEL</p>
-            <h3 className="mt-2 font-display font-bold text-lg text-white">Your Assigned Faculty & Jury</h3>
-            <p className="mt-1 text-xs text-[#8B96A5]">Your team must present in front of both assigned panel members.</p>
-          </div>
-          {phase2Assignment ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#121A23] border border-white/5">
-                {phase2Assignment.coordinator_photo_url ? <img src={phase2Assignment.coordinator_photo_url} alt={phase2Assignment.coordinator_name} className="w-16 h-16 rounded-xl object-cover" /> : <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center text-[10px] text-[#8B96A5]">PHOTO</div>}
-                <div><p className="text-[10px] font-mono text-[#FF7A30]">FACULTY COORDINATOR</p><p className="font-bold text-white">{phase2Assignment.coordinator_name}</p><p className="text-xs text-[#8B96A5]">{phase2Assignment.coordinator_designation || 'Faculty Coordinator'}</p></div>
-              </div>
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-[#121A23] border border-white/5">
-                {phase2Assignment.jury_photo_url ? <img src={phase2Assignment.jury_photo_url} alt={phase2Assignment.jury_name} className="w-16 h-16 rounded-xl object-cover" /> : <div className="w-16 h-16 rounded-xl bg-white/5 flex items-center justify-center text-[10px] text-[#8B96A5]">PHOTO</div>}
-                <div><p className="text-[10px] font-mono text-[#FF7A30]">JURY MEMBER</p><p className="font-bold text-white">{phase2Assignment.jury_name}</p><p className="text-xs text-[#8B96A5]">{phase2Assignment.jury_designation || 'Jury Member'}</p></div>
-              </div>
-            </div>
-          ) : (
-            <div className="p-4 rounded-xl bg-[#121A23] border border-white/5 text-sm text-[#8B96A5]">Your Phase 2 panel assignment is not available yet. Please check again after the administrator assigns your team.</div>
-          )}
-        </section>
-      )}
-
-          
+          PHASE ROADMAP
+      ========================================================= */}
       <div className="p-6 rounded-2xl bg-[#0D1219] border border-white/10 space-y-4">
         <div className="flex items-center justify-between gap-4">
           <h3 className="font-display font-bold text-lg text-white">
