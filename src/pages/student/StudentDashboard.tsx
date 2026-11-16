@@ -76,6 +76,24 @@ type PhaseRow = {
   public_visible: boolean;
 };
 
+// Returned by the SECURITY DEFINER RPC get_my_phase2_panel().
+// Students do not query phase2_team_assignments directly because its RLS
+// intentionally avoids a recursive team_members policy.
+type Phase2PanelRow = {
+  team_id: string;
+  panel_id: string;
+  coordinator_id: string;
+  coordinator_name: string;
+  coordinator_email: string;
+  coordinator_designation: string | null;
+  coordinator_department: string | null;
+  coordinator_photo_url: string | null;
+  jury_name: string;
+  jury_designation: string;
+  jury_photo_url: string | null;
+  assigned_at: string;
+};
+
 type DashboardData = {
   student: StudentRow;
   team: TeamRow | null;
@@ -84,6 +102,8 @@ type DashboardData = {
   submission: SubmissionRow | null;
   phase1FormUrl: string | null;
   phase1Accepting: boolean;
+  phase2Panel: Phase2PanelRow | null;
+  phase2PanelError: string | null;
   phases: PhaseRow[];
 };
 
@@ -220,6 +240,8 @@ export const StudentDashboard: React.FC = () => {
       let submission: SubmissionRow | null = null;
       let phase1FormUrl: string | null = null;
       let phase1Accepting = false;
+      let phase2Panel: Phase2PanelRow | null = null;
+      let phase2PanelError: string | null = null;
 
       /* ---------------------------------------------------------
          4. If the student belongs to a team, load team data
@@ -385,7 +407,31 @@ export const StudentDashboard: React.FC = () => {
       }
 
       /* ---------------------------------------------------------
-         8. Load public phases
+         8. Load the student's Phase 2 coordinator + jury panel.
+
+         Do not query phase2_team_assignments directly from the student
+         client. The Phase 2 migration deliberately withholds that table
+         from students to avoid recursive RLS through team_members.
+         This RPC returns only the authenticated student's own panel.
+      --------------------------------------------------------- */
+      if (team) {
+        const { data: panelRows, error: panelError } = await supabase.rpc(
+          'get_my_phase2_panel'
+        );
+
+        if (panelError) {
+          // Keep the rest of the dashboard available if the Phase 2 RPC
+          // has not yet been installed or its permissions need attention.
+          console.error('Student Phase 2 panel load error:', panelError);
+          phase2PanelError = panelError.message;
+        } else {
+          const rows = (Array.isArray(panelRows) ? panelRows : []) as Phase2PanelRow[];
+          phase2Panel = rows.find((row) => row.team_id === team?.id) ?? rows[0] ?? null;
+        }
+      }
+
+      /* ---------------------------------------------------------
+         9. Load public phases
       --------------------------------------------------------- */
       const { data: phasesData, error: phasesError } = await supabase
         .from('phases')
@@ -418,6 +464,8 @@ export const StudentDashboard: React.FC = () => {
         submission,
         phase1FormUrl,
         phase1Accepting,
+        phase2Panel,
+        phase2PanelError,
         phases: (phasesData ?? []) as PhaseRow[],
       });
     } catch (err) {
@@ -545,6 +593,8 @@ return () => {
     submission,
     phase1FormUrl,
     phase1Accepting,
+    phase2Panel,
+    phase2PanelError,
   } = data;
 
   return (
@@ -746,7 +796,7 @@ return () => {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="font-mono text-xs text-[#8B96A5]">
-                  FACULTY MENTOR / JURY
+                  PHASE 1 FACULTY MENTOR
                 </span>
 
                 <Building className="w-4 h-4 text-[#8B5CF6]" />
@@ -764,8 +814,8 @@ return () => {
                           ? ` • ${faculty.department}`
                           : ''
                       }`
-                    : 'Assigned academic jury coordinator from NIE committee.'
-                  : 'Balanced faculty allocation takes place following registration closure.'}
+                    : 'Your assigned Phase 1 faculty mentor.'
+                  : 'Your Phase 1 faculty mentor allocation is pending.'}
               </p>
             </div>
 
@@ -860,6 +910,135 @@ return () => {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+      )}
+
+      {/* =========================================================
+          PHASE 2 COORDINATOR + JURY PANEL
+      ========================================================= */}
+      {team && (
+        <section className="rounded-2xl bg-[#0D1219] border border-white/10 p-6 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <div className="font-mono text-[10px] font-bold tracking-[0.18em] text-[#FF7A30]">
+                PHASE 2 · FINAL PRESENTATION
+              </div>
+              <h2 className="mt-2 font-display font-bold text-xl text-white">
+                Your Evaluation Panel
+              </h2>
+              <p className="mt-1 text-xs text-[#8B96A5]">
+                Your assigned faculty coordinator and jury member for the final presentation.
+              </p>
+            </div>
+            <span
+              className={`inline-flex w-fit items-center rounded-full px-3 py-1 text-[10px] font-mono font-bold ${
+                phase2Panel
+                  ? 'bg-[#10B981]/10 text-[#10B981]'
+                  : phase2PanelError
+                    ? 'bg-red-500/10 text-red-300'
+                    : 'bg-[#F59E0B]/10 text-[#F59E0B]'
+              }`}
+            >
+              {phase2Panel
+                ? 'PANEL ASSIGNED'
+                : phase2PanelError
+                  ? 'PANEL DETAILS UNAVAILABLE'
+                  : 'ALLOCATION PENDING'}
+            </span>
+          </div>
+
+          {phase2PanelError ? (
+            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4">
+              <p className="text-sm font-semibold text-amber-200">
+                Phase 2 panel details could not be loaded.
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-[#B8C2D0]">
+                Please ask the NIErnaya administrator to verify that the
+                <code className="mx-1 text-[#FFB17F]">get_my_phase2_panel()</code>
+                database function is installed and granted to authenticated users.
+                Your team, Phase 1 mentor and submission information are still available.
+              </p>
+            </div>
+          ) : phase2Panel ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Phase 2 faculty coordinator */}
+              <div className="rounded-xl border border-white/10 bg-[#121A23] p-5">
+                <div className="font-mono text-[10px] font-bold tracking-widest text-[#8B96A5]">
+                  FACULTY COORDINATOR
+                </div>
+                <div className="mt-4 flex items-center gap-4">
+                  {phase2Panel.coordinator_photo_url ? (
+                    <img
+                      src={phase2Panel.coordinator_photo_url}
+                      alt={phase2Panel.coordinator_name}
+                      className="h-16 w-16 shrink-0 rounded-2xl border border-white/10 object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                      <Building className="h-7 w-7 text-[#8B5CF6]" />
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="break-words font-display text-lg font-bold text-white">
+                      {phase2Panel.coordinator_name || 'Coordinator details pending'}
+                    </h3>
+                    <p className="mt-1 text-xs leading-relaxed text-[#8B96A5]">
+                      {phase2Panel.coordinator_designation || 'Faculty Coordinator'}
+                      {phase2Panel.coordinator_department
+                        ? ` · ${phase2Panel.coordinator_department}`
+                        : ''}
+                    </p>
+                    {phase2Panel.coordinator_email && (
+                      <p className="mt-1 break-all text-[11px] text-[#36D9FF]">
+                        {phase2Panel.coordinator_email}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Display-only jury profile configured by the admin */}
+              <div className="rounded-xl border border-white/10 bg-[#121A23] p-5">
+                <div className="font-mono text-[10px] font-bold tracking-widest text-[#8B96A5]">
+                  JURY MEMBER
+                </div>
+                <div className="mt-4 flex items-center gap-4">
+                  {phase2Panel.jury_photo_url ? (
+                    <img
+                      src={phase2Panel.jury_photo_url}
+                      alt={phase2Panel.jury_name || 'Jury member'}
+                      className="h-16 w-16 shrink-0 rounded-2xl border border-white/10 object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+                      <Users className="h-7 w-7 text-[#FF7A30]" />
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <h3 className="break-words font-display text-lg font-bold text-white">
+                      {phase2Panel.jury_name?.trim() || 'Jury details pending'}
+                    </h3>
+                    <p className="mt-1 text-xs leading-relaxed text-[#8B96A5]">
+                      {phase2Panel.jury_designation?.trim() || 'Jury member profile will be updated by the administrator.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed border-[#F59E0B]/30 bg-[#121A23] p-5 text-center">
+              <Users className="mx-auto h-8 w-8 text-[#F59E0B]" />
+              <h3 className="mt-3 font-display font-bold text-white">
+                Your Phase 2 panel has not been assigned yet
+              </h3>
+              <p className="mx-auto mt-1 max-w-lg text-xs leading-relaxed text-[#8B96A5]">
+                Once the administrator assigns your shortlisted team to a panel,
+                the coordinator and jury member details will appear here.
+              </p>
+            </div>
+          )}
+        </section>
       )}
 
       {/* =========================================================
