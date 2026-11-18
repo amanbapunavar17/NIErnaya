@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Building2, Mail, Phone, Users2 } from 'lucide-react';
+import { Building2, Mail, Phone, Users2, ShieldCheck } from 'lucide-react';
 import { FACULTY_ORGANIZERS } from '../../../config/site';
 
 const FACULTY_IMAGES = [
@@ -74,6 +75,17 @@ const LEADERS = [
   },
 ];
 
+// Phase 2 Jury Members
+const JURY_MEMBERS = [
+  { name: 'Dr. Mayura Tapkire', image: '/images/jury/jury1.jpg' },
+  { name: 'Mrs. Sumana K M', image: '/images/jury/jury2.jpg' },
+  { name: 'Mr. Balaji V', image: '/images/jury/jury3.png' },
+  { name: 'Mr.G. B. Janardhana Swamy', image: '/images/jury/jury4.jpg' },
+  { name: 'Mr. Kartik Manguli', image: '/images/jury/jury5.jpg' },
+  { name: 'Mr. Bharath G', image: '/images/jury/jury6.jpg' },
+  { name: 'Ms. Nanditha V', image: '/images/jury/jury7.jpg' },
+];
+
 export const Organizers: React.FC = () => {
   const faculty = FACULTY_ORGANIZERS
     .filter((fac) => fac.published)
@@ -86,6 +98,7 @@ export const Organizers: React.FC = () => {
       className="relative overflow-hidden bg-[#07090D] px-4 py-14 text-white sm:py-20 md:px-8"
     >
       <div className="mx-auto max-w-7xl">
+
         {/* Section heading */}
         <div className="mx-auto mb-8 max-w-3xl text-center sm:mb-12">
           <p className="font-mono text-[10px] font-black uppercase tracking-[0.3em] text-[#36D9FF]">
@@ -103,49 +116,46 @@ export const Organizers: React.FC = () => {
           </p>
         </div>
 
-        
-{/* Principal + Vice-Principal + HOD */}
-<div className="mb-8 grid grid-cols-1 items-stretch gap-4 md:mb-10 md:grid-cols-3 md:gap-5">
-  {LEADERS.map((leader) => (
-    <article
-      key={leader.title}
-      className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0D1219] transition-all duration-300 hover:border-[#FF7A30]/40 hover:shadow-xl hover:shadow-[#FF7A30]/5"
-    >
-      {/* Official portrait */}
-      <div className="relative h-56 w-full shrink-0 overflow-hidden bg-[#121A23] sm:h-64 md:h-56 lg:h-64">
-        <img
-          src={leader.image}
-          alt={leader.name}
-          className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105"
-          loading="lazy"
-          onError={(event) => {
-            event.currentTarget.style.display = 'none';
-          }}
-        />
-      </div>
+        {/* Principal + Vice-Principal + HOD */}
+        <div className="mb-8 grid grid-cols-1 items-stretch gap-4 md:mb-10 md:grid-cols-3 md:gap-5">
+          {LEADERS.map((leader) => (
+            <article
+              key={leader.title}
+              className="group flex min-w-0 flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0D1219] transition-all duration-300 hover:border-[#FF7A30]/40 hover:shadow-xl hover:shadow-[#FF7A30]/5"
+            >
+              <div className="relative h-56 w-full shrink-0 overflow-hidden bg-[#121A23] sm:h-64 md:h-56 lg:h-64">
+                <img
+                  src={leader.image}
+                  alt={leader.name}
+                  className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-105"
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
 
-      {/* Official details */}
-      <div className="flex flex-1 flex-col p-4 sm:p-5">
-        <div className="mb-3 inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[#FF7A30]/25 bg-[#FF7A30]/10 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-wider text-[#FF7A30]">
-          <Users2 className="h-3.5 w-3.5 shrink-0" />
-          <span>{leader.title}</span>
+              <div className="flex flex-1 flex-col p-4 sm:p-5">
+                <div className="mb-3 inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[#FF7A30]/25 bg-[#FF7A30]/10 px-3 py-1.5 font-mono text-[9px] font-black uppercase tracking-wider text-[#FF7A30]">
+                  <Users2 className="h-3.5 w-3.5 shrink-0" />
+                  <span>{leader.title}</span>
+                </div>
+
+                <h3 className="font-display text-xl font-black leading-snug text-white transition-colors group-hover:text-[#36D9FF] sm:text-2xl">
+                  {leader.name}
+                </h3>
+
+                <p className="mt-2 text-sm font-semibold leading-6 text-[#D5DCE5]">
+                  {leader.designation}
+                </p>
+
+                <p className="mt-2 text-xs leading-5 text-[#8B96A5] sm:text-sm">
+                  {leader.subtitle}
+                </p>
+              </div>
+            </article>
+          ))}
         </div>
-
-        <h3 className="font-display text-xl font-black leading-snug text-white transition-colors group-hover:text-[#36D9FF] sm:text-2xl">
-          {leader.name}
-        </h3>
-
-        <p className="mt-2 text-sm font-semibold leading-6 text-[#D5DCE5]">
-          {leader.designation}
-        </p>
-
-        <p className="mt-2 text-xs leading-5 text-[#8B96A5] sm:text-sm">
-          {leader.subtitle}
-        </p>
-      </div>
-    </article>
-  ))}
-</div>
 
         {/* Faculty heading */}
         <div className="mb-6 flex items-center gap-4 sm:mb-8">
@@ -171,7 +181,6 @@ export const Organizers: React.FC = () => {
                 key={fac.id}
                 className="group flex min-w-0 flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0D1219] transition-all duration-300 hover:-translate-y-1 hover:border-[#36D9FF]/40 hover:shadow-xl hover:shadow-[#36D9FF]/5 sm:rounded-3xl"
               >
-                {/* Faculty portrait */}
                 <div className="relative h-32 shrink-0 overflow-hidden bg-[#121A23] sm:h-36 lg:h-40">
                   <img
                     src={image}
@@ -190,7 +199,6 @@ export const Organizers: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Faculty details */}
                 <div className="flex flex-1 flex-col p-3 sm:p-4">
                   <div className="mb-1.5 font-mono text-[8px] font-black uppercase tracking-wider text-[#FF7A30] sm:text-[9px]">
                     {fac.role}
@@ -206,7 +214,6 @@ export const Organizers: React.FC = () => {
 
                   <p className="mt-2 flex items-start gap-1.5 text-[10px] leading-4 text-[#8B96A5] sm:text-[11px]">
                     <Building2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#36D9FF]" />
-
                     <span className="min-w-0 break-words">
                       Computer Science and Engineering
                     </span>
@@ -219,7 +226,6 @@ export const Organizers: React.FC = () => {
                       title={contact.email}
                     >
                       <Mail className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#36D9FF]" />
-
                       <span className="min-w-0 break-all">
                         {contact.email}
                       </span>
@@ -230,7 +236,6 @@ export const Organizers: React.FC = () => {
                       className="flex items-center gap-2 transition-colors hover:text-[#FF7A30]"
                     >
                       <Phone className="h-3.5 w-3.5 shrink-0 text-[#FF7A30]" />
-
                       <span>{contact.phone}</span>
                     </a>
                   </div>
@@ -238,6 +243,71 @@ export const Organizers: React.FC = () => {
               </article>
             );
           })}
+        </div>
+
+        {/* =====================================================
+            NEW SECTION: PHASE 2 JURY MEMBERS
+        ====================================================== */}
+        <div className="mt-16 sm:mt-20">
+
+          {/* Jury section heading */}
+          <div className="mx-auto mb-8 max-w-2xl text-center">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#FF7A30]/20 bg-[#FF7A30]/10 px-3 py-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#FF7A30]" />
+              <span className="font-mono text-[9px] font-black tracking-[0.18em] text-[#FF7A30]">
+                PHASE 2 EVALUATION PANEL
+              </span>
+            </div>
+
+            <h2 className="font-display text-2xl font-black text-white sm:text-3xl">
+              JURY <span className="text-[#36D9FF]">MEMBERS</span>
+            </h2>
+
+            <p className="mt-2 text-xs leading-6 text-[#8B96A5] sm:text-sm">
+              Meet the jury members participating in the Phase 2 project
+              evaluation of NIErnaya 2026.
+            </p>
+          </div>
+
+          {/* Compact jury profiles */}
+          <div className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+
+            {JURY_MEMBERS.map((jury, index) => (
+              <article
+                key={jury.name}
+                className="group flex items-center gap-3 rounded-xl border border-white/10 bg-[#0D1219] p-3 transition-all duration-300 hover:border-[#36D9FF]/40 hover:bg-[#121A23] sm:gap-4 sm:p-4"
+              >
+                {/* Small circular jury image */}
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border border-[#36D9FF]/25 bg-[#121A23] sm:h-16 sm:w-16">
+                  <img
+                    src={jury.image}
+                    alt={jury.name}
+                    className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-110"
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.style.display = 'none';
+                    }}
+                  />
+                </div>
+
+                {/* Jury details */}
+                <div className="min-w-0">
+                  <p className="font-mono text-[8px] font-bold uppercase tracking-wider text-[#FF7A30]">
+                    JURY {String(index + 1).padStart(2, '0')}
+                  </p>
+
+                  <h3 className="mt-1 break-words font-display text-xs font-bold leading-snug text-white transition-colors group-hover:text-[#36D9FF] sm:text-sm">
+                    {jury.name}
+                  </h3>
+
+                  <p className="mt-1 text-[9px] text-[#8B96A5]">
+                    Phase 2
+                  </p>
+                </div>
+              </article>
+            ))}
+
+          </div>
         </div>
 
         {/* Organizer credit */}
@@ -254,7 +324,10 @@ export const Organizers: React.FC = () => {
             THE NATIONAL INSTITUTE OF ENGINEERING • MYSURU
           </p>
         </div>
+
       </div>
     </section>
   );
 };
+
+export default Organizers;

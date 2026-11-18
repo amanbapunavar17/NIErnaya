@@ -48,6 +48,8 @@ import { AdminCertificatesPage } from './pages/admin/AdminCertificatesPage';
 import { AdminAuditPage } from './pages/admin/AdminAuditPage';
 import { AdminPhase1ShortlistPage } from './pages/admin/AdminPhase1ShortlistPage';
 import AdminPhase2ManagementPage from './pages/admin/AdminPhase2ManagementPage';
+import AdminPhase2ResultsPage from './pages/admin/AdminPhase2ResultsPage';
+
 
 /**
  * Public landing page gets the persistent 3D environment.
@@ -276,6 +278,12 @@ const AppContent: React.FC = () => {
               path="audit"
               element={<AdminAuditPage />}
             />
+
+            <Route
+              path="phase2-results"
+              element={<AdminPhase2ResultsPage />}
+            />
+
           </Route>
 
           {/* =====================================================
